@@ -109,7 +109,9 @@
 	let str = '';
 	
 	vm.$on(cusid,(count)=>{
+		
 		str = count
+		
 	});
 	
 	
@@ -195,6 +197,7 @@
 						console.log(response);
 						this.tableData = response.data.data;
 //						alert('成功')
+						console.log(str);
 					})
 					.catch(error => {
 						console.log(error);

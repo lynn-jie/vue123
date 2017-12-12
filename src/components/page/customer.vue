@@ -7,7 +7,6 @@
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-
 				<el-breadcrumb-item>客户管理</el-breadcrumb-item>
 			</el-breadcrumb>
 
@@ -96,7 +95,9 @@
 <script>
 	//	import vPageTitle from '../common/pageTitle.vue';
 	import axios from 'axios';
+	
 	import api from '../../api/api.js';
+	
 	import {vm,cusid} from "../../common/vm.js";
 	
 	export default {

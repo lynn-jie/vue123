@@ -4,11 +4,13 @@ import axios from 'axios';
 export default{
 	
 
-    apidomain:'/manager/'  // 所有数据api的域名地址
+    apidomain: 'http://localhost/manager/' // 所有数据api的域名地址
   
   
 //    测试网网址
-//   'http://localhost/manager/'
+//    'http://localhost/manager/'
+//    上线网址
+//    '/manager/'
 
  //	let base = '';
     

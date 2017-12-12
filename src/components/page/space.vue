@@ -73,17 +73,20 @@
 			</el-table-column>
 			<el-table-column prop="name" label="空间名称">
 			</el-table-column>
-			<el-table-column prop="controlid" label="控制器ID" width="180">
+			<el-table-column prop="deviceIccd" label="控制器ID" width="180">
 			</el-table-column>
-			<el-table-column prop="number" label="净化器数量">
+			<el-table-column prop="cleanerAmount" label="净化器数量">
 			</el-table-column>
-			<el-table-column prop="admini" label="管理员">
+			<el-table-column prop="admin" label="管理员">
 			</el-table-column>
-			<el-table-column prop="number" label="成员数量">
+			<el-table-column prop="createTime" label="创建日期" width="180">
 			</el-table-column>
-			<el-table-column prop="date" label="创建日期" width="180">
+			<el-table-column prop="memberCount" label="在线数量" width="180">
 			</el-table-column>
-
+			<el-table-column prop="balance" label="余额" width="180">
+			</el-table-column>
+			
+			
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
@@ -107,7 +110,17 @@
 </template>
 
 <script>
-	//	import vPageTitle from '../common/pageTitle.vue';
+	
+	import axios from 'axios';
+	import api from '../../api/api.js';
+	import {vm,cusid} from "../../common/vm.js";
+	
+	let str = '';
+	vm.$on(cusid,(count)=>{
+		str = count
+	});
+
+	
 
 	export default {
 
@@ -115,16 +128,8 @@
 			return {
 				prnumber:'',
 				mmnumber:'',
-				tableData: [{
-					date: '2016-05-02',
-					name: '小（2）班',
-					telephone: '025-5201314',
-					admini: '尹余',
-					controlid: 'ysass2wq31ds',
-					number: '1',
-					address: '江苏省南京市江宁区秣周东路12号'
-
-				}, {
+				tableData: [
+					{
 					date: '2016-05-04',
 					name: '大（2）班 ',
 					telephone: '025-5201314',
@@ -132,24 +137,8 @@
 					controlid: 'asad2wq31ds',
 					number: '12',
 					address: '江苏省南京市江宁区秣周东路12号'
-
-				}, {
-					date: '2016-05-01',
-					name: '中（2）班 ',
-					telephone: '025-5201314',
-					admini: '尹余',
-					controlid: 'csas2wqsssss31ds',
-					number: '3',
-					address: '江苏省南京市江宁区秣周东路12号'
-				}, {
-					date: '2016-05-03',
-					name: '大（2）班 ',
-					telephone: '025-5201314',
-					admini: '尹余',
-					controlid: 'xsa2wqddds31ds',
-					number: '15',
-					address: '江苏省南京市江宁区秣周东路12号'
-				}],
+					}
+				],
 				dialogFormVisible: false,
 				form: {
 					name: '',
@@ -165,7 +154,29 @@
 			}
 
 		},
+		created() {
+
+			this.init();
+
+		},
+
 		methods: {
+			init() {
+				axios.get(api.apidomain +'space/list/'+ str +'?n=100&p=1', {
+
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
+//						alert('成功')
+						console.log(str);
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+						
+					});
+			},
 			open6() {
 				this.$confirm('此操作将停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
