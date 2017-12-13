@@ -17,7 +17,7 @@
 
 		<div class="btn">
 
-			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
+			<!--<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>-->
 
 			<!--内嵌表格-->
 
@@ -46,7 +46,7 @@
 							<el-dropdown-item>用户</el-dropdown-item>
 							<el-dropdown-item>维护员</el-dropdown-item>
 							<el-dropdown-item disabled>管理员</el-dropdown-item>
-							<el-dropdown-item divided>蚵仔煎</el-dropdown-item>
+							<el-dropdown-item divided>普通员</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>-->
 
@@ -83,9 +83,9 @@
 			</el-table-column>
 			<el-table-column prop="role" label="角色类型">
 			</el-table-column>
-			<el-table-column prop="telephone" label="电话" width="180">
+			<el-table-column prop="phone" label="电话" width="180">
 			</el-table-column>
-			<el-table-column prop="email" label="邮箱">
+			<el-table-column prop="mail" label="邮箱">
 			</el-table-column>
 			<el-table-column prop="date" label="创建日期" width="180">
 			</el-table-column>
@@ -112,6 +112,18 @@
 
 <script>
 	//	import vPageTitle from '../common/pageTitle.vue';
+	
+	import axios from 'axios';
+	import api from '../../api/api.js';
+	
+	import {vm,spaceId} from "../../common/vm.js";
+	
+	let str = '';
+	
+	vm.$on(spaceId,(count)=>{
+		str = count
+	});
+	
 
 	export default {
 
@@ -154,7 +166,30 @@
 			}
 
 		},
+		
+		created() {
+
+			this.init();
+
+		},
+	
 		methods: {
+			
+			init() {
+				axios.get(api.apidomain +'user/inspace/'+ str +'?n=100&p=1', {
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
+
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+						
+					});
+			},
+			
 			open6() {
 				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',

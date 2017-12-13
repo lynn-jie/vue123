@@ -1,6 +1,6 @@
 <template>
     <div >
-        <!--<v-pageTitle vtitle="BasicTables"></v-pageTitle>-->
+        <v-pageTitle vtitle="BasicTables"></v-pageTitle>
 
 
          <el-row :gutter="20">

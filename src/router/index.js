@@ -12,6 +12,10 @@ import organization from '@/components/page/organization';
 import space from '@/components/page/space';
 import member from '@/components/page/member';
 
+import usermgt from '@/components/page/usermgt';
+
+import tests from '@/components/page/tests';
+
 
 
 Vue.use(Router)
@@ -52,6 +56,13 @@ mode:'hash',
         },{
           path:'/member',
           component:member
+        },
+        {
+          path:'/usermgt',
+          component:usermgt
+        },{
+        	path:'/tests',
+          component:tests
         }
  
       ]

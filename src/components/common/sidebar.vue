@@ -20,6 +20,8 @@
                 <el-menu-item index="space">空间管理</el-menu-item>
                 <el-menu-item index="member">成员管理</el-menu-item>
                 <el-menu-item index="login">登陆</el-menu-item>
+                <el-menu-item index="tests">测试</el-menu-item>
+                
                 
                
             </el-submenu>

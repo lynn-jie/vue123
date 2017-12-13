@@ -36,12 +36,15 @@
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-
+					
+			<!--联级选择择器  begin methode-->
 					<el-form-item label="地址" :label-width="formLabelWidth">
 						<el-cascader :options="options2" @active-item-change="handleItemChange" :props="props"></el-cascader>
+						
 						<el-input v-model="form.address" auto-complete="off"></el-input>
 					</el-form-item>
-
+			<!--联级选择择器  end -->
+			
 					<el-form-item label="数量" :label-width="formLabelWidth">
 						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
 						<el-input-number v-model="num1" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
@@ -104,14 +107,12 @@
 <script>
 	import axios from 'axios';
 	import api from '../../api/api.js';
-	import {vm,cusid} from "../../common/vm.js";
 	
+	import {vm,cusid} from "../../common/vm.js";
 	let str = '';
 	
 	vm.$on(cusid,(count)=>{
-		
 		str = count
-		
 	});
 	
 	
@@ -121,34 +122,20 @@
 			return {
 				num1: '',
 				tableData: [
-									{
-										date: '2016-05-02',
-										name: '蒙特梭利幼儿园江宁分校',
-										telephone: '13605152933',
-										number: '10',
-										address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
-					
-									}, {
-										date: '2016-05-04',
-										name: ' 蒙特梭利幼儿园江宁分校 ',
-										telephone: '13605152933',
-										number: '10',
-										address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
-					
-									}, 
-					//				{
-					//					date: '2016-05-01',
-					//					name: ' 蒙特梭利幼儿园江宁分校 ',
-					//					telephone: '025-5201314',
-					//					number: '15',
-					//					address: '江苏省南京市江宁区诚信大道8号'
-					//				}, {
-					//					date: '2016-05-03',
-					//					name: ' 蒙特梭利幼儿园江宁分校 ',
-					//					telephone: '025-5201314',
-					//					number: '15',
-					//					address: '江苏省南京市江宁区诚信大道8号'
-					//				}
+		        {
+					date: '2016-05-02',
+					name: '蒙特梭利幼儿园江宁分校',
+					telephone: '13605152933',
+					number: '10',
+					address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
+				}, 
+				{
+					date: '2016-05-04',
+					name: ' 蒙特梭利幼儿园江宁分校 ',
+					telephone: '13605152933',
+					number: '10',
+					address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
+				}         
 				],
 				options2: [{
 					id:"1",
@@ -158,7 +145,13 @@
 					id:"2",
 					label: '浙江',
 					cities: []
-				}],
+				}, {
+					id:"3",
+					label: '安徽',
+					cities: []
+				}
+				
+				],
 				
 				props: {
 					value: 'label',
@@ -183,7 +176,6 @@
 		created() {
 
 			this.init();
-
 
 		},
 

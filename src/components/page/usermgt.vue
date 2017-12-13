@@ -15,7 +15,7 @@
 
 		<div class="btn">
 
-			<!--<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>-->
+			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
 
 			<!--内嵌表格-->
 
@@ -85,21 +85,19 @@
 			</el-table-column>
 			<el-table-column prop="status" label="状态 ">
 			</el-table-column>
-			<el-table-column prop="reg_time	" label="注册时间">
+			<el-table-column prop="customer_id	" label="注册时间">
 			</el-table-column>
 			
-			
-			
-
-			<el-table-column label="操作">
+			<!--<el-table-column label="操作">
 				<template slot-scope="scope">
 
-					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
 					
 
 				</template>
-			</el-table-column>
+			</el-table-column>-->
+			
 		</el-table>
 
 		<div class="paging block">
@@ -120,6 +118,20 @@
 	//	import vPageTitle from '../common/pageTitle.vue';
 	import axios from 'axios';
 	import api from '../../api/api.js';
+	import {vm,cusid} from "../../common/vm.js";
+	
+	let str = '';
+	
+	vm.$on(cusid,(count)=>{
+		
+		str = count
+		
+	});
+	
+	
+	
+	
+	
 	
 	export default {
 		data() {
@@ -174,13 +186,14 @@
 		methods: {
 			
 			init() {
-				axios.get(api.apidomain +'/user/search?n=100&p=1', {
+				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
+				
 
 					})
 					.then(response => {
 						console.log(response);
 						this.tableData = response.data.data;
-						console.log('获取数据成功');
+						console.log('成功链接');
 					})
 					.catch(error => {
 						console.log(error);

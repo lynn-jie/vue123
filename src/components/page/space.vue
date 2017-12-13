@@ -34,27 +34,30 @@
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="控制器ID" :label-width="formLabelWidth">
-						<el-input v-model="form.controlid" auto-complete="off"></el-input>
+						<el-input v-model="form.deviceIccd" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="净化器数量" :label-width="formLabelWidth">
 
 						<!--<el-input v-model="form.prnumber" auto-complete="off"></el-input>-->
-						<el-input-number v-model="form.prnumber" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
+						<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
 
 					</el-form-item>
 					<el-form-item label="管理员" :label-width="formLabelWidth">
-						<el-input v-model="form.admini" auto-complete="off"></el-input>
+						<el-input v-model="form.admin" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="成员数量" :label-width="formLabelWidth">
+					<el-form-item label="在线数量" :label-width="formLabelWidth">
 						
 						<!--<el-input v-model="form.mmnumber" auto-complete="off"></el-input>-->
-						<el-input-number v-model="form.mmnumber" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
+						<el-input-number v-model="form.memberCount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
 					</el-form-item>
-					<el-form-item label="日期" :label-width="formLabelWidth">
+					
+					<!--日期后台添加-->
+					<!--<el-form-item label="日期" :label-width="formLabelWidth">
 						<el-col :span="11">
 							<el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
 						</el-col>
-					</el-form-item>
+					</el-form-item>-->
+					
 				</el-form>
 
 				<div slot="footer" class="dialog-footer">
@@ -91,7 +94,9 @@
 				<template slot-scope="scope">
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
 					<router-link to="../member">
-						<el-button size="mini" type="warning">成员管理</el-button>
+						
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >成员管理</el-button>
+						
 					</router-link>
 
 					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
@@ -112,14 +117,16 @@
 <script>
 	
 	import axios from 'axios';
+	
 	import api from '../../api/api.js';
-	import {vm,cusid} from "../../common/vm.js";
+	
+	import {vm,cusid,spaceId} from "../../common/vm.js";
 	
 	let str = '';
+	
 	vm.$on(cusid,(count)=>{
 		str = count
 	});
-
 	
 
 	export default {
@@ -161,15 +168,19 @@
 		},
 
 		methods: {
+			sendId(index, row){
+				vm.$emit(spaceId,row.id)
+			},
+			
 			init() {
 				axios.get(api.apidomain +'space/list/'+ str +'?n=100&p=1', {
-
+					
 					})
 					.then(response => {
 						console.log(response);
 						this.tableData = response.data.data;
 //						alert('成功')
-						console.log(str);
+						console.log(response.data);
 					})
 					.catch(error => {
 						console.log(error);

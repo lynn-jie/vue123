@@ -69,6 +69,11 @@
 				<template slot-scope="scope">
 
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
+					<router-link to="../usermgt">
+
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >用户管理</el-button>
+
+					</router-link>
 
 					<router-link to="../organization">
 
@@ -176,8 +181,11 @@
 						
 					})
 					.then(response => {
-						console.log(response);
+						
 						this.tableData = response.data.data;
+						console.log('-------');
+						console.log(response);
+						console.log('-------');
 
 					})
 					.catch(error => {
