@@ -51,7 +51,7 @@
         var _this = this;
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-              _this.$router.replace('/DashBoard');
+              _this.$router.replace('/Home');
             this.logining = true;
             } 
 //          NProgress.start();

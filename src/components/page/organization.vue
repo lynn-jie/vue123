@@ -22,29 +22,37 @@
 
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
-
-					<!--<el-form-item label="角色选择" :label-width="formLabelWidth">
-						<el-select v-model="form.region" placeholder="请选择角色">
-							<el-option label="管理员" value="shanghai"></el-option>
-							<el-option label="用户" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>-->
-
 					<el-form-item label="机构名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					
-			<!--联级选择择器  begin methode-->
+
+					<!--联级选择择器  begin methode-->
 					<el-form-item label="地址" :label-width="formLabelWidth">
-						<el-cascader :options="options2" @active-item-change="handleItemChange" :props="props"></el-cascader>
-						
+
+						<div class="cascader ">
+							省
+							<select id="p" v-model="provinceId">
+								<option value="">请选择</option>
+								<option v-for="item in provinces" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+							市
+							<select id="c" v-model="cityId">
+								<option value="">请选择</option>
+								<option v-for="item in citys" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+							区
+							<select id="c" v-model="countyId">
+								<option value="">请选择</option>
+								<option v-for="item in countys" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+						</div>
+
 						<el-input v-model="form.address" auto-complete="off"></el-input>
 					</el-form-item>
-			<!--联级选择择器  end -->
-			
+					<!--联级选择择器  end -->
 					<el-form-item label="数量" :label-width="formLabelWidth">
 						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
 						<el-input-number v-model="num1" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
@@ -54,7 +62,7 @@
 
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
-					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+					<el-button type="primary" @click='add'>确 定</el-button>
 				</div>
 			</el-dialog>
 
@@ -96,10 +104,9 @@
 
 		<div class="paging block">
 
-			
 			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
 			</el-pagination>
-			
+
 		</div>
 	</div>
 </template>
@@ -107,56 +114,36 @@
 <script>
 	import axios from 'axios';
 	import api from '../../api/api.js';
-	
-	import {vm,cusid} from "../../common/vm.js";
+
+	import { vm, cusid } from "../../common/vm.js";
 	let str = '';
-	
-	vm.$on(cusid,(count)=>{
-		str = count
+
+	vm.$on(cusid, (count) => {
+		str = count;
+		
 	});
-	
-	
+
 	export default {
 
 		data() {
 			return {
 				num1: '',
 				tableData: [
-		        {
-					date: '2016-05-02',
-					name: '蒙特梭利幼儿园江宁分校',
-					telephone: '13605152933',
-					number: '10',
-					address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
-				}, 
-				{
-					date: '2016-05-04',
-					name: ' 蒙特梭利幼儿园江宁分校 ',
-					telephone: '13605152933',
-					number: '10',
-					address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
-				}         
+//				{
+//						date: '2016-05-02',
+//						name: '蒙特梭利幼儿园江宁分校',
+//						telephone: '13605152933',
+//						number: '10',
+//						address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
+//					},
+//					{
+//						date: '2016-05-04',
+//						name: ' 蒙特梭利幼儿园江宁分校 ',
+//						telephone: '13605152933',
+//						number: '10',
+//						address: '南京市江宁区清水亭东路9号万科金域蓝湾70号'
+//					}
 				],
-				options2: [{
-					id:"1",
-					label: '江苏',
-					cities: []
-				}, {
-					id:"2",
-					label: '浙江',
-					cities: []
-				}, {
-					id:"3",
-					label: '安徽',
-					cities: []
-				}
-				
-				],
-				
-				props: {
-					value: 'label',
-					children: 'cities'
-				},
 				dialogFormVisible: false,
 				form: {
 					name: '',
@@ -166,9 +153,17 @@
 					delivery: false,
 					type: [],
 					resource: '',
-					desc: ''
+					desc: '',
+					address:''
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				provinces: [],
+				citys: [],
+				countys: [],
+				provinceId: '',
+				cityId: '',
+				countyId: '',
+				str:''
 			}
 
 		},
@@ -176,53 +171,100 @@
 		created() {
 
 			this.init();
+			this.province();
+
+		},
+		watch: {
+			provinceId(curVal, oldVal) {
+				//	console.log(curVal+'-'+oldVal);
+				axios.get(api.apidomain +'address/city/list/' + curVal, {
+
+					}).then(response => {
+
+						this.citys = response.data;
+
+					})
+					.catch(error => {
+						console.log(error);
+
+					});
+			},
+
+			cityId(curVal, oldVal) {
+				//console.log(curVal+'-'+oldVal);
+				axios.get(api.apidomain +'address/county/list/' + curVal, {
+
+					}).then(response => {
+						this.countys = response.data;
+					})
+					.catch(error => {
+						console.log(error);
+
+					});
+			}
 
 		},
 
 		methods: {
 
 			init() {
-				axios.get(api.apidomain +'org/list/'+ str +'?n=100&p=1', {
+				axios.get(api.apidomain + 'org/list/' + str + '?n=100&p=1', {
 
 					})
 					.then(response => {
 						console.log(response);
 						this.tableData = response.data.data;
-//						alert('成功')
+						//	alert('成功')
+						console.log(123456789);
+						
 						console.log(str);
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
-						
+
 					});
 			},
-//			add(){
-//				axios.get(api.apidomain +'address/province/list')
-//					.then(response => {
-//						console.log(response);
-//						this.tableData = response.data.data;
+			province() {
+				axios.get(api.apidomain +'address/province/list', {
+
+					}).then(response => {
+						//						console.log(response);
+						this.provinces = response.data;
+						//						console.log(response.data);
+
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('province错误');
+
+					});
+			},
+			add() {
+				console.log(str);
+				axios.post(api.apidomain + 'org', {
+						customerId:str,
+						name:this.form.name,
+						provinceId:this.provinceId,
+						cityId:this.cityId,
+						countyId:this.countyId,
+						address:this.form.address
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
 //						alert('成功')
-//					})
-//					.catch(error => {
-//						console.log(error);
-//						console.log('网络错误');
-//						
-//					});
-//			},
-			handleItemChange(val) {
-				console.log('active item:', val);
-				setTimeout(_ => {
-					if(val.indexOf('江苏') > -1 && !this.options2[0].cities.length) {
-						this.options2[0].cities = [{
-							label: '南京'
-						}];
-					} else if(val.indexOf('浙江') > -1 && !this.options2[1].cities.length) {
-						this.options2[1].cities = [{
-							label: '杭州'
-						}];
-					}
-				}, 300);
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+					this.init();
+					this.dialogFormVisible = false;
+					console.log(1223)
+					
+					
+					
 			},
 
 			open6() {
@@ -283,5 +325,17 @@
 	
 	.el-button+.el-button {
 		margin-left: 0;
+	}
+	
+	.cascader {
+		margin-bottom: 15px;
+	}
+	
+	.cascader select {
+		width: 90px;
+		height: 35px;
+		border: 1px solid #C1CBDA;
+		border-radius: 5px;
+		margin-right: 10px;
 	}
 </style>

@@ -5,28 +5,26 @@
 
 		<el-cascader :options="options2" @active-item-change="handleItemChange" :props="props"></el-cascader>
 
-		<div id="dv"></div>
-		
 
-		<legend>省市区三级联动</legend>
-		省份:
+	<div class="cascader ">
+		省
 		<select id="p" v-model="provinceid">
-			
 			<option value="">请选择</option>
 			<option  v-for="item in province" v-bind:value="item.id">{{ item.name }}</option>
 		</select>
-		城市:
+		市
 		<select id="c" v-model="cityid">
 			<option value="" >请选择</option>
 			<option v-for = "item in citys" v-bind:value="item.id">{{ item.name }}</option>
 			
 		</select>
-		区域:
+		区
 		<select id="c" v-model="countyid">
 			<option value="">请选择</option>
 			<option v-for = "item in countys" v-bind:value="item.id">{{ item.name }}</option>
-			
 		</select>
+	</div>
+
 
 	</div>
 
