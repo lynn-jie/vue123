@@ -9,27 +9,45 @@
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
 				<el-breadcrumb-item>客户管理</el-breadcrumb-item>
 			</el-breadcrumb>
-
 		</div>
 
 		<div class="br"></div>
 
+		<!-- 新增按钮 -弹出表格-->
+		
 		<div class="btn">
 
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
-
-			<!--内嵌表格-->
-
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
+					<el-form-item label="客户名称" :label-width="formLabelWidth">
+						<el-input v-model="form.name" auto-complete="off"></el-input>
+					</el-form-item>
+					<el-form-item label="电话" :label-width="formLabelWidth">
+						<el-input v-model="form.phone" auto-complete="off"></el-input>
+					</el-form-item>
+					<el-form-item label="机构数量" :label-width="formLabelWidth">
+						<el-input v-model="form.orgcount" auto-complete="off"></el-input>
+						<!--<el-input-number v-model="form.orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">取 消</el-button>
+					<el-button type="primary" @click="add">确 定</el-button>
+				</div>
+			</el-dialog>
 
-					<!--<el-form-item label="角色选择" :label-width="formLabelWidth">
-						<el-select v-model="form.region" placeholder="请选择角色">
-							<el-option label="管理员" value="shanghai"></el-option>
-							<el-option label="用户" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>-->
+			<el-button size="medium" type="success" @click="open3()">刷新</el-button>
+			<el-button size="medium" type="danger" @click="open6()">停用</el-button>
 
+		</div>
+
+
+		<!--修改按钮弹出框-->
+		
+		<div class="modification">
+			<el-dialog title="修改" :visible.sync="dialogFormVisibles">
+				<el-form :model="form">
 					<el-form-item label="客户名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
@@ -38,70 +56,89 @@
 					</el-form-item>
 					<el-form-item label="机构数量" :label-width="formLabelWidth">
 						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
-						<el-input-number v-model="orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
-						
+						<!--<el-input-number v-model="orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+						<el-input v-model="form.orgcount" auto-complete="off"></el-input>
 					</el-form-item>
-
 				</el-form>
-
 				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogFormVisible = false">取 消</el-button>
+					<el-button @click="dialogFormVisibles = false">取 消</el-button>
 					<el-button type="primary" @click="add">确 定</el-button>
 				</div>
 			</el-dialog>
-
-			<el-button size="medium" type="success" @click="open3()">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6(row)">停用</el-button>
-
 		</div>
 
-		<el-table :data="tableData" style="width: 100%" class="table">
 
-			<el-table-column type="selection" width="55"></el-table-column>
-			<el-table-column prop="name" label="客户名称" width="180"></el-table-column>
-			<el-table-column prop="phone" label="电话" width="180"></el-table-column>
-			<el-table-column prop="orgcount" label="机构数量">
-			</el-table-column>
-			<el-table-column prop="createTime" label="创建日期" width="180">
+		<!--viwe 界面-->
+		
+		<el-table :data="tableData" style="width: 100%" class="table">
+			<el-table-column type="selection" width="55">
 			</el-table-column>
 			
-			<el-table-column label="操作">
+			<el-table-column  label="客户名称" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.name }}</p>
+				</template>
+			</el-table-column>
+			
+			<el-table-column  label="电话" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.phone }}</p>
+				</template>
+			</el-table-column>
+			
+			<el-table-column  label="机构数量">
+				<template slot-scope="scope">
+					<p>{{ scope.row.orgcount }}</p>
+				</template>
 				
+			</el-table-column>
+			
+			<el-table-column prop="createTime" label="创建日期" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.createTime }}</p>
+				</template>
+			</el-table-column>
+
+			<el-table-column label="操作">
+
 				<template slot-scope="scope">
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
 					<router-link to="../usermgt">
-						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >用户管理</el-button>
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">用户管理</el-button>
 					</router-link>
 					<router-link to="../organization">
-						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >机构管理</el-button>
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">机构管理</el-button>
 					</router-link>
-					<el-button size="mini" type="primary" @click='modify(row)'>修改</el-button>
+
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+				
 				</template>
 			</el-table-column>
 		</el-table>
-
-		<div class="paging block">
-
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
-			</el-pagination>
-
-		</div>
 		
+		
+		<!--分页栏-->
+		
+		<div class="paging block">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="100" layout="total, prev, pager, next" :total="500">
+			</el-pagination>
+		</div>
+
 	</div>
 </template>
 
 <script>
 	//	import vPageTitle from '../common/pageTitle.vue';
 	import axios from 'axios';
-	
+
 	import api from '../../api/api.js';
-	
-	import {vm,cusid} from "../../common/vm.js";
-	
+
+	import { vm, cusid } from "../../common/vm.js";
+
 	export default {
 		data() {
 			return {
-				orgcount:'',
 				tableData: [
 					//				{
 					//					date: '2016-05-02',
@@ -110,8 +147,11 @@
 					//					number: '15'
 					//				}
 				],
+				
 				dialogFormVisible: false,
+				dialogFormVisibles: false,
 				form: {
+					id: '',
 					name: '',
 					createTime: '',
 					delivery: false,
@@ -119,9 +159,14 @@
 					resource: '',
 					desc: '',
 					linkman: '',
-					phone:'',
+					phone: '',
+					status:'',
+					tel:'',
+					fax:'',
+					orgcount:'',
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				currentPage: 1,
 			}
 
 		},
@@ -132,9 +177,25 @@
 
 		},
 		methods: {
-			sendId(index, row){
-				vm.$emit(cusid,row.id)
+			sendId(index, row) {
+				vm.$emit(cusid, row.id)
 			},
+			//修改
+			handleEdit(index,row){
+//				console.log(index,row);
+				this.dialogFormVisibles = true;
+				this.form.id = row.id;
+				this.form.name = row.name;
+				this.form.phone = row.phone;
+				this.form.orgcount = row.orgcount;
+			},
+//			获取删除行
+			handleDelete(index, row) {
+//				this.customerId = row.customerId;
+//				this.status = !row.status;
+				console.log(index, row);
+			},
+
 			open6() {
 				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
@@ -154,6 +215,7 @@
 				});
 
 			},
+			//	    刷新控件
 			open3() {
 				this.$notify({
 					title: '成功',
@@ -162,101 +224,82 @@
 				});
 				this.init();
 			},
-			handleChange(orgcount) {
-				console.log(orgcount);
+			//     表单 input 添加数量 按钮
+			handleChange(val) {
+				console.log(val);
+			},
+			//    分页控件 
+			handleSizeChange(val) {
+				console.log(`每页 ${val} 条`);
+			},
+			handleCurrentChange(val) {
+				console.log(`当前页: ${val}`);
 			},
 
-			//	             获取列表数据
-			init() {
+			//	      获取列表数据
+			//			init() {
+			//
+			//				axios.get(api.apidomain + 'customer/search?n=100&p=1', {
+			//
+			//					})
+			//					.then(response => {
+			//						this.tableData = response.data.data;
+			//						
+			//
+			//					})
+			//					.catch(error => {
+			//						console.log(error);
+			//						console.log('网络错误，请重启...');
+			//
+			//					});
+			//			},
 
-				axios.get(api.apidomain + 'customer/search?n=100&p=1', {
-						
+			//  获取 
+			init() {
+				axios.get(api.apidomain + 'customer/search', {
+						params: {
+							n: 200,
+							p: this.currentPage,
+						}
 					})
 					.then(response => {
 						this.tableData = response.data.data;
-
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误，请重启...');
-						
+
 					});
 			},
-
-			//	添加
-			//{
-//						params:from
-						
-//						'name': "测试demo",
-//						'linkman': "352048",
-//						'phone': "120119188"
-					//}
+			//  添加
 			add() {
-				axios.post( api.apidomain + 'customer', {
-					name:this.form.name,
-					phone:this.form.phone,
-					linkman:this.form.linkman,
-					createTime:this.form.createTime,
-					orgcount:orgcount
-					
-				})
+				axios.post(api.apidomain + 'customer', {
+//						id: this.form.id,
+						name: this.form.name,
+						phone: this.form.phone,
+						linkman: this.form.linkman,
+						createTime: this.form.createTime,
+						orgcount: this.orgcount,
+						
+						
+
+					})
 					.then(response => {
-//						console.log(this.tableData);
-//						console.log(123)
-//						alert('恭喜添加成功！');
+						//			console.log(this.tableData);
+						//			console.log(123)
+						//			alert('恭喜添加成功！');
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('错误');
-						
-						
+						console.log('网络错误');
+
 					});
 				this.dialogFormVisible = false;
+				this.dialogFormVisibles = false;
 				this.init();
 
-			},
-						
-//			          修改
-			modify(customerId) {
-				console.log(customerId);
-				//				axios.get('http://localhost/manager/customer', {
-				//						params:customerId
-				//					
-				//				})
-				//				.then(response => {
-				//					//					console.log(response);
-				//					this.tableData = response.data.data;
-				//					console.log(123)
-				//				})
-				//				.catch(error => {
-				//					console.log(error);
-				//					console.log('网络错误');
-				//					alert('访问错误，无法修改');
-				//				});
-				this.dialogFormVisible = true;
-				this.init();
+			}
 
-			},
-
-			//          删除
-			//			del(){
-			//				axios.post('http://localhost/manager/customer', {
-			//						params:this.form
-			//					
-			//				})
-			//				.then(response => {
-			//					//					console.log(response);
-			//					this.tableData = response.data.data;
-			//					console.log(123)
-			//				})
-			//				.catch(error => {
-			//					console.log(error);
-			//					console.log('网络错误');
-			//					alert('无法访问,请联系后台管理员');
-			//				});
-			//				this.dialogFormVisible = false;
-			//				
-			//			}
 		}
 	}
 </script>

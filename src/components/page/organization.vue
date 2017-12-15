@@ -18,7 +18,7 @@
 
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
 
-			<!--内嵌表格-->
+			<!--新增 内嵌表格-->
 
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
@@ -53,11 +53,6 @@
 						<el-input v-model="form.address" auto-complete="off" placeholder='请输入具体地址'></el-input>
 					</el-form-item>
 					<!--联级选择择器  end -->
-					<!--<el-form-item label="数量" :label-width="formLabelWidth">
-						<el-input v-model="form.number" auto-complete="off"></el-input>
-						<el-input-number v-model="num1" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
-					</el-form-item>-->
-					
 
 				</el-form>
 
@@ -71,23 +66,96 @@
 			<el-button size="medium" type="danger" @click="open6">停用</el-button>
 
 		</div>
+		
+		
+		<div class="Modify">
+
+			<!--修改表格-->
+
+			<el-dialog title="修改" :visible.sync="dialogFormVisibles">
+				<el-form :model="form">
+					<el-form-item label="机构名称" :label-width="formLabelWidth">
+						<el-input v-model="form.name" auto-complete="off" placeholder='请输入机构名称'></el-input>
+					</el-form-item>
+					<el-form-item label="电话" :label-width="formLabelWidth">
+						<el-input v-model="form.tel" auto-complete="off" placeholder='请输入固定电话或11位手机号码'></el-input>
+					</el-form-item>
+
+					<!--联级选择择器  begin methode-->
+					<el-form-item label="地址" :label-width="formLabelWidth">
+
+						<div class="cascader ">
+							省
+							<select id="p" v-model="provinceId">
+								<option value="">请选择</option>
+								<option v-for="item in provinces" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+							市
+							<select id="c" v-model="cityId">
+								<option value="">请选择</option>
+								<option v-for="item in citys" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+							区
+							<select id="c" v-model="countyId">
+								<option value="">请选择</option>
+								<option v-for="item in countys" v-bind:value="item.id">{{ item.name }}</option>
+							</select>
+						</div>
+						<el-input v-model="form.address" auto-complete="off" placeholder='请输入具体地址'></el-input>
+					</el-form-item>
+					<!--联级选择择器  end -->
+				</el-form>
+
+				<div slot="footer" class="dialog-footer">
+					
+					<el-button @click="dialogFormVisibles = false">取 消</el-button>
+					<el-button type="primary" @click="add">确 定</el-button>
+				</div>
+			</el-dialog>
+
+		
+
+		</div>
+		
 
 		<el-table :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="name" label="机构名称">
+			
+			<el-table-column label="机构名称">
+				<template slot-scope="scope">
+					<p>{{ scope.row.name }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="tel" label="电话" width="180">
+			<el-table-column label="电话" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.tel }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="provinceStr" label="省">
+			<el-table-column  label="省">
+				<template slot-scope="scope">
+					<p>{{ scope.row.provinceStr }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="cityStr" label="市">
+			<el-table-column label="市">
+				<template slot-scope="scope">
+					<p>{{ scope.row.cityStr }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="countyStr" label="区/县">
+			<el-table-column label="区/县">
+				<template slot-scope="scope">
+					<p>{{ scope.row.countyStr }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="address" label="地址">
+			<el-table-column  label="地址">
+				<template slot-scope="scope">
+					<p>{{ scope.row.address }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="date" label="创建日期" width="180">
+			<el-table-column label="创建日期" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.date }}</p>
+				</template>
 			</el-table-column>
 
 			<el-table-column label="操作">
@@ -96,23 +164,25 @@
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
 
 					<router-link to="../space">
-
-						<el-button size="mini" type="warning" @send="">空间管理</el-button>
+						<!--<el-button size="mini" type="warning" @send="">空间管理</el-button>-->
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">机构管理</el-button>
 
 					</router-link>
-
-					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
+					
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
 
 				</template>
+				
 			</el-table-column>
 		</el-table>
 
-		<div class="paging block">
+		<!--<div class="paging block">
 
 			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
 			</el-pagination>
 
-		</div>
+		</div>-->
 	</div>
 </template>
 
@@ -150,8 +220,10 @@
 //					}
 				],
 				dialogFormVisible: false,
+				dialogFormVisibles: false,
 				formLabelWidth: '120px',
 				form: {
+					id:'',
 					name: '',
 					region: '',
 					tel:'',
@@ -167,7 +239,7 @@
 				countys: [],
 				provinceId: '',
 				cityId: '',
-				countyId: ''
+				countyId: '',
 			}
 
 		},
@@ -210,6 +282,19 @@
 		},
 
 		methods: {
+			sendId(index, row) {
+				vm.$emit(cusid, row.id)
+			},
+			handleEdit(index,row){
+//				console.log(index,row);
+				this.dialogFormVisibles = true;
+				this.form.id = row.id;
+				this.form.name = row.name;
+				this.form.tel = row.tel;
+				this.form.address = row.address;
+				this.form.provinceStr = row.provinceStr;
+				
+			},
 
 			init() {
 				axios.get(api.apidomain + 'org/list/' + str + '?n=100&p=1', {
@@ -264,11 +349,10 @@
 						console.log('网络错误');
 					});
 					
-					this.dialogFormVisible = false;
-					
-					console.log('---------------------------')
+					this.dialogFormVisible = false,
+					this.dialogFormVisibles = false,
 					this.init();
-					console.log('**************************')
+				
 					
 					
 					
