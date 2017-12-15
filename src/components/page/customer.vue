@@ -36,9 +36,10 @@
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="数量" :label-width="formLabelWidth">
+					<el-form-item label="机构数量" :label-width="formLabelWidth">
 						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
-						<el-input-number v-model="form.orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
+						<el-input-number v-model="orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
+						
 					</el-form-item>
 
 				</el-form>
@@ -63,36 +64,28 @@
 			</el-table-column>
 			<el-table-column prop="createTime" label="创建日期" width="180">
 			</el-table-column>
-
+			
 			<el-table-column label="操作">
-
+				
 				<template slot-scope="scope">
-
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
 					<router-link to="../usermgt">
-
 						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >用户管理</el-button>
-
 					</router-link>
-
 					<router-link to="../organization">
-
 						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >机构管理</el-button>
-
 					</router-link>
-
 					<el-button size="mini" type="primary" @click='modify(row)'>修改</el-button>
-
 				</template>
 			</el-table-column>
 		</el-table>
 
-		<!--<div class="paging block">-->
+		<div class="paging block">
 
-			<!-- <span class="demonstration">调整每页显示条数</span>-->
-			<!--<el-pagination layout="sizes, prev, pager, next" :total="1000">
+			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
 			</el-pagination>
-		</div>-->
+
+		</div>
 		
 	</div>
 </template>
@@ -108,7 +101,7 @@
 	export default {
 		data() {
 			return {
-				num1: '',
+				orgcount:'',
 				tableData: [
 					//				{
 					//					date: '2016-05-02',
@@ -121,13 +114,12 @@
 				form: {
 					name: '',
 					createTime: '',
-					orgcount: '',
 					delivery: false,
 					type: [],
 					resource: '',
 					desc: '',
 					linkman: '',
-					phone: ''
+					phone:'',
 				},
 				formLabelWidth: '120px'
 			}
@@ -170,8 +162,8 @@
 				});
 				this.init();
 			},
-			handleChange(value) {
-				console.log(value);
+			handleChange(orgcount) {
+				console.log(orgcount);
 			},
 
 			//	             获取列表数据
@@ -181,16 +173,12 @@
 						
 					})
 					.then(response => {
-						
 						this.tableData = response.data.data;
-						console.log('-------');
-						console.log(response);
-						console.log('-------');
 
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
+						console.log('网络错误，请重启...');
 						
 					});
 			},
@@ -204,16 +192,23 @@
 //						'phone': "120119188"
 					//}
 			add() {
-				axios.post( api.apidomain + 'customer', this.form)
+				axios.post( api.apidomain + 'customer', {
+					name:this.form.name,
+					phone:this.form.phone,
+					linkman:this.form.linkman,
+					createTime:this.form.createTime,
+					orgcount:orgcount
+					
+				})
 					.then(response => {
-						console.log(this.tableData);
-						console.log(123)
-						alert('恭喜成功！');
+//						console.log(this.tableData);
+//						console.log(123)
+//						alert('恭喜添加成功！');
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
-						alert('网络错误！');
+						console.log('错误');
+						
 						
 					});
 				this.dialogFormVisible = false;

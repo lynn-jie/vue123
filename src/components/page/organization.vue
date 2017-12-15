@@ -23,10 +23,10 @@
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
 					<el-form-item label="机构名称" :label-width="formLabelWidth">
-						<el-input v-model="form.name" auto-complete="off"></el-input>
+						<el-input v-model="form.name" auto-complete="off" placeholder='请输入机构名称'></el-input>
 					</el-form-item>
 					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.phone" auto-complete="off"></el-input>
+						<el-input v-model="form.tel" auto-complete="off" placeholder='请输入固定电话或11位手机号码'></el-input>
 					</el-form-item>
 
 					<!--联级选择择器  begin methode-->
@@ -50,13 +50,14 @@
 							</select>
 						</div>
 
-						<el-input v-model="form.address" auto-complete="off"></el-input>
+						<el-input v-model="form.address" auto-complete="off" placeholder='请输入具体地址'></el-input>
 					</el-form-item>
 					<!--联级选择择器  end -->
-					<el-form-item label="数量" :label-width="formLabelWidth">
-						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
+					<!--<el-form-item label="数量" :label-width="formLabelWidth">
+						<el-input v-model="form.number" auto-complete="off"></el-input>
 						<el-input-number v-model="num1" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
-					</el-form-item>
+					</el-form-item>-->
+					
 
 				</el-form>
 
@@ -76,11 +77,15 @@
 			</el-table-column>
 			<el-table-column prop="name" label="机构名称">
 			</el-table-column>
-			<el-table-column prop="telephone" label="电话" width="180">
+			<el-table-column prop="tel" label="电话" width="180">
+			</el-table-column>
+			<el-table-column prop="provinceStr" label="省">
+			</el-table-column>
+			<el-table-column prop="cityStr" label="市">
+			</el-table-column>
+			<el-table-column prop="countyStr" label="区/县">
 			</el-table-column>
 			<el-table-column prop="address" label="地址">
-			</el-table-column>
-			<el-table-column prop="number" label="空间数量">
 			</el-table-column>
 			<el-table-column prop="date" label="创建日期" width="180">
 			</el-table-column>
@@ -145,25 +150,24 @@
 //					}
 				],
 				dialogFormVisible: false,
+				formLabelWidth: '120px',
 				form: {
 					name: '',
 					region: '',
+					tel:'',
 					date1: '',
 					date2: '',
 					delivery: false,
 					type: [],
 					resource: '',
-					desc: '',
-					address:''
+					desc: ''
 				},
-				formLabelWidth: '120px',
 				provinces: [],
 				citys: [],
 				countys: [],
 				provinceId: '',
 				cityId: '',
-				countyId: '',
-				str:''
+				countyId: ''
 			}
 
 		},
@@ -215,7 +219,6 @@
 						console.log(response);
 						this.tableData = response.data.data;
 						//	alert('成功')
-						console.log(123456789);
 						
 						console.log(str);
 					})
@@ -245,6 +248,7 @@
 				axios.post(api.apidomain + 'org', {
 						customerId:str,
 						name:this.form.name,
+						tel:this.form.tel,
 						provinceId:this.provinceId,
 						cityId:this.cityId,
 						countyId:this.countyId,
@@ -259,9 +263,12 @@
 						console.log(error);
 						console.log('网络错误');
 					});
-					this.init();
+					
 					this.dialogFormVisible = false;
-					console.log(1223)
+					
+					console.log('---------------------------')
+					this.init();
+					console.log('**************************')
 					
 					
 					
@@ -292,6 +299,7 @@
 					message: '刷新成功了哟，点击可关闭',
 					type: 'success'
 				});
+				this.init();
 			},
 			handleChange(value) {
 				console.log(value);
