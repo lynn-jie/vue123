@@ -62,7 +62,7 @@
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisibles = false">取 消</el-button>
-					<el-button type="primary" @click="add">确 定</el-button>
+					<el-button type="primary" @click="modify">确 定</el-button>
 				</div>
 			</el-dialog>
 		</div>
@@ -274,7 +274,7 @@
 			//  添加
 			add() {
 				axios.post(api.apidomain + 'customer', {
-//						id: this.form.id,
+			//		    id: this.form.id,
 						name: this.form.name,
 						phone: this.form.phone,
 						linkman: this.form.linkman,
@@ -295,10 +295,35 @@
 
 					});
 				this.dialogFormVisible = false;
+				this.init();
+
+			},
+			
+			//  修改
+			modify() {
+				axios.put(api.apidomain + 'customer', {
+						id: this.form.id,
+						name: this.form.name,
+						phone: this.form.phone,
+						linkman: this.form.linkman,
+						createTime: this.form.createTime,
+						orgcount: this.orgcount,					
+
+					})
+					.then(response => {
+						//			console.log(this.tableData);
+						//			console.log(123)
+						//			alert('恭喜添加成功！');
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
 				this.dialogFormVisibles = false;
 				this.init();
 
-			}
+			},
+			
 
 		}
 	}

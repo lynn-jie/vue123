@@ -109,7 +109,7 @@
 				<div slot="footer" class="dialog-footer">
 					
 					<el-button @click="dialogFormVisibles = false">取 消</el-button>
-					<el-button type="primary" @click="add">确 定</el-button>
+					<el-button type="primary" @click="modify">确 定</el-button>
 				</div>
 			</el-dialog>
 
@@ -117,7 +117,7 @@
 
 		</div>
 		
-
+		<!--标题栏-->
 		<el-table :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
@@ -169,7 +169,7 @@
 
 					</router-link>
 					
-					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
 
 				</template>
@@ -177,12 +177,6 @@
 			</el-table-column>
 		</el-table>
 
-		<!--<div class="paging block">
-
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
-			</el-pagination>
-
-		</div>-->
 	</div>
 </template>
 
@@ -190,14 +184,19 @@
 	import axios from 'axios';
 	import api from '../../api/api.js';
 
-	import { vm, cusid } from "../../common/vm.js";
+	import { vm, cusid ,orgid} from "../../common/vm.js";
+	
+	
 	let str = '';
 
 	vm.$on(cusid, (count) => {
 		str = count;
 		
 	});
-
+	
+	
+	
+	
 	export default {
 
 		data() {
@@ -283,29 +282,46 @@
 
 		methods: {
 			sendId(index, row) {
-				vm.$emit(cusid, row.id)
+				vm.$emit(orgid,row.id)
 			},
+			
+			
+//          对话框form添加数据
 			handleEdit(index,row){
-//				console.log(index,row);
+				console.log(index,row);
 				this.dialogFormVisibles = true;
 				this.form.id = row.id;
 				this.form.name = row.name;
 				this.form.tel = row.tel;
 				this.form.address = row.address;
 				this.form.provinceStr = row.provinceStr;
+				this.cityId = row.cityId;
+				this.countyId =	row.countyId;
+				this.provinceId = row.provinceId;
+				
+				
 				
 			},
-
+			// 获取
 			init() {
+				
+				if(window.localStorage){ 
+				if(!str){
+                     str=localStorage.getItem("str")
+				}
+				localStorage.setItem("str",str);
+			}
+				
 				axios.get(api.apidomain + 'org/list/' + str + '?n=100&p=1', {
-
 					})
 					.then(response => {
+						console.log('*******');
 						console.log(response);
+						console.log('*******');
 						this.tableData = response.data.data;
 						//	alert('成功')
 						
-						console.log(str);
+						console.log(response.data);
 					})
 					.catch(error => {
 						console.log(error);
@@ -313,6 +329,7 @@
 
 					});
 			},
+			//省
 			province() {
 				axios.get(api.apidomain +'address/province/list', {
 
@@ -328,6 +345,7 @@
 
 					});
 			},
+			// 添加
 			add() {
 				console.log(str);
 				axios.post(api.apidomain + 'org', {
@@ -341,7 +359,6 @@
 					})
 					.then(response => {
 						console.log(response);
-						this.tableData = response.data.data;
 //						alert('成功')
 					})
 					.catch(error => {
@@ -350,14 +367,36 @@
 					});
 					
 					this.dialogFormVisible = false,
-					this.dialogFormVisibles = false,
 					this.init();
-				
-					
-					
-					
+		
 			},
+			// 修改
+			modify() {
+				axios.put(api.apidomain + 'org', {
+						customerId:str,
+						id:this.form.id,
+						name:this.form.name,
+						tel:this.form.tel,
+						provinceId:this.provinceId,
+						cityId:this.cityId,
+						countyId:this.countyId,
+						address:this.form.address,			
 
+					})
+					.then(response => {
+						//			console.log(this.tableData);
+						//			console.log(123)
+						//			alert('恭喜添加成功！');
+						
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+				this.dialogFormVisibles = false;
+//				this.init();
+			},
+			// 停用
 			open6() {
 				this.$confirm('此操作将停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
@@ -377,6 +416,7 @@
 				});
 
 			},
+			//刷新
 			open3() {
 				this.$notify({
 					title: '成功',

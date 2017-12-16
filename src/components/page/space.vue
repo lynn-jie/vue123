@@ -20,49 +20,30 @@
 
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
 
-			<!--内嵌表格-->
+			<!--新增内嵌表格-->
 
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
-					<!--<el-form-item label="角色选择" :label-width="formLabelWidth">
-						<el-select v-model="form.region" placeholder="请选择角色">
-							<el-option label="管理员" value="shanghai"></el-option>
-							<el-option label="用户" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>-->
 					<el-form-item label="空间名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="控制器ID" :label-width="formLabelWidth">
-						<el-input v-model="form.deviceIccd" auto-complete="off"></el-input>
-					</el-form-item>
-					<el-form-item label="净化器数量" :label-width="formLabelWidth">
-
-						<!--<el-input v-model="form.prnumber" auto-complete="off"></el-input>-->
-						<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
-
-					</el-form-item>
-					<el-form-item label="管理员" :label-width="formLabelWidth">
-						<el-input v-model="form.admin" auto-complete="off"></el-input>
-					</el-form-item>
-					<el-form-item label="在线数量" :label-width="formLabelWidth">
-						
-						<!--<el-input v-model="form.mmnumber" auto-complete="off"></el-input>-->
-						<el-input-number v-model="form.memberCount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>
-					</el-form-item>
 					
-					<!--日期后台添加-->
-					<!--<el-form-item label="日期" :label-width="formLabelWidth">
-						<el-col :span="11">
-							<el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-						</el-col>
-					</el-form-item>-->
+					<el-form-item label="净化器数量" :label-width="formLabelWidth">
+						<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
+						<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+					</el-form-item>
+					<el-form-item label="设备ID" :label-width="formLabelWidth">
+							<select id="p" v-model="form.deviceId">
+								<option value="">请选择</option>
+								<option v-for="item in deviceinfos">{{ item.id }}</option>
+							</select>
+				</el-form-item>
 					
 				</el-form>
 
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
-					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+					<el-button type="primary" @click="add">确 定</el-button>
 				</div>
 			</el-dialog>
 
@@ -70,23 +51,73 @@
 			<el-button size="medium" type="danger" @click="open6">停用</el-button>
 
 		</div>
+		
+		<el-dialog title="修改" :visible.sync="dialogFormVisibles">
+				<el-form :model="form">
+					<el-form-item label="空间名称" :label-width="formLabelWidth">
+						<el-input v-model="form.name" auto-complete="off"></el-input>
+					</el-form-item>
+					
+					<el-form-item label="净化器数量" :label-width="formLabelWidth">
+						<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
+						<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+					</el-form-item>
+				
+				<el-form-item label="设备ID" :label-width="formLabelWidth">
+							<select >
+								<option value="">请选择</option>
+								<option v-for="item in deviceinfos">{{ item.id }}</option>
+							</select>
+				</el-form-item>
+					
+				</el-form>
 
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisibles = false">取 消</el-button>
+					<el-button type="primary" @click="modify">确 定</el-button>
+				</div>
+			</el-dialog>
+		
+		
+		<!--标题栏-->
 		<el-table :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="name" label="空间名称">
+			
+			<el-table-column label="空间名称">
+				<template slot-scope="scope">
+					<p>{{ scope.row.name }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="deviceIccd" label="控制器ID" width="180">
+			<el-table-column label="控制器ID" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.deviceIccd }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="cleanerAmount" label="净化器数量">
+			<el-table-column label="净化器数量">
+				<template slot-scope="scope">
+					<p>{{ scope.row.cleanerAmount }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="admin" label="管理员">
+			<el-table-column  label="管理员">
+				<template slot-scope="scope">
+					<p>{{ scope.row.admin }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="createTime" label="创建日期" width="180">
+			<el-table-column label="创建日期" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.createTime }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="memberCount" label="在线数量" width="180">
+			<el-table-column  label="在线数量" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.memberCount }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="balance" label="余额" width="180">
+			<el-table-column  label="余额" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.balance }}</p>
+				</template>
 			</el-table-column>
 			
 			
@@ -94,23 +125,21 @@
 				<template slot-scope="scope">
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
 					<router-link to="../member">
-						
 						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >成员管理</el-button>
-						
 					</router-link>
 
-					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
+					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 
 					<el-button size="mini" type="primary" @click="dialogFormVisible = true">设置</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
-		<div class="paging block">
-			<!-- <span class="demonstration">调整每页显示条数</span>-->
+		<!--<div class="paging block">
+			
 			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
 			</el-pagination>
-		</div>
+		</div>-->
 	</div>
 </template>
 
@@ -120,67 +149,115 @@
 	
 	import api from '../../api/api.js';
 	
-	import {vm,cusid,spaceId} from "../../common/vm.js";
+	import {vm, cusid, orgid} from "../../common/vm.js";
+	
+	
 	
 	let str = '';
+	let orgids = '';
+	
+
+	
 	
 	vm.$on(cusid,(count)=>{
 		str = count
 	});
 	
-
+	
+	vm.$on(orgid,(count)=>{
+		orgids = count
+	});
+	
+//	localStorage.setItem("qwer",str);
+	
+	
 	export default {
 
 		data() {
 			return {
+				tableData: [
+//					{
+//					date: '2016-05-04',
+//					name: '大（2）班 ',
+//					telephone: '025-5201314',
+//					admini: '尹余',
+//					controlid: 'asad2wq31ds',
+//					number: '12',
+//					address: '江苏省南京市江宁区秣周东路12号'
+//					}
+				],
 				prnumber:'',
 				mmnumber:'',
-				tableData: [
-					{
-					date: '2016-05-04',
-					name: '大（2）班 ',
-					telephone: '025-5201314',
-					admini: '尹余',
-					controlid: 'asad2wq31ds',
-					number: '12',
-					address: '江苏省南京市江宁区秣周东路12号'
-					}
-				],
 				dialogFormVisible: false,
+				dialogFormVisibles: false,
+				formLabelWidth: '120px',
 				form: {
 					name: '',
-					region: '',
 					date1: '',
 					date2: '',
 					delivery: false,
 					type: [],
 					resource: '',
-					desc: ''
+					desc: '',
+					deviceName:'',
+					dayUses:'',
+					yearUses:'',
+					createTime:'',
+					monthUses:'',
+					cleanerAmount:'',
+					admin:'',
+					totalUses:'',
+					deviceId:'',
+					deviceIccd:'',
+					status:'',
+					memberCount:'',
+//					customerId:'str',
+					id:'',
+					balance:'',
+//					orgId:'orgids',
 				},
-				formLabelWidth: '120px'
+				deviceinfos:[],
+				
+				
 			}
 
 		},
 		created() {
 
 			this.init();
+			this.deviceinfo();
 
 		},
 
 		methods: {
-			sendId(index, row){
-				vm.$emit(spaceId,row.id)
+			handleEdit(index,row){
+//				console.log(index,row);
+				this.dialogFormVisibles = true;
+				this.form.customerId = row.customerId;
+				this.form.name = row.name;
+				this.form.cleanerAmount = row.cleanerAmount;
+				this.form.orgId = row.orgId;
+				this.form.deviceId = row.deviceId;
+				
+				
 			},
-			
+			// 获取
 			init() {
+				if(window.localStorage){ 
+				if(!str){
+                     str=localStorage.getItem("str")
+				}
+				localStorage.setItem("str",str);
+			}
+				
 				axios.get(api.apidomain +'space/list/'+ str +'?n=100&p=1', {
 					
 					})
 					.then(response => {
 						console.log(response);
 						this.tableData = response.data.data;
-//						alert('成功')
-						console.log(response.data);
+						console.log('----------------------')
+						console.log(response.data)
 					})
 					.catch(error => {
 						console.log(error);
@@ -188,6 +265,69 @@
 						
 					});
 			},
+			deviceinfo() {
+				axios.get(api.apidomain +'deviceinfo/search?n=100&p=1', {
+					})
+					.then(response => {
+						console.log(response);
+						this.deviceinfos = response.data.data;
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+						
+					});
+			},
+			
+			// 添加
+			add() {
+				axios.post(api.apidomain + 'space', {
+						deviceId:this.form.deviceId,
+						name:this.form.name,
+						cleanerAmount:this.form.cleanerAmount,
+						orgId:orgids,
+						customerId:str,
+						
+					})
+					.then(response => {
+						console.log(response);
+//						alert('成功')
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+					
+					this.dialogFormVisible = false,
+					this.init();
+		
+			},
+			// 修改
+			modify(){
+				axios.post(api.apidomain + 'space', {
+						customerId:str,
+						name:this.form.name,
+						tel:this.form.tel,
+						provinceId:this.provinceId,
+						cityId:this.cityId,
+						countyId:this.countyId,
+						address:this.form.address
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
+//						alert('成功')
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+					
+					this.dialogFormVisible = false,
+					this.init();
+		
+			},
+			
 			open6() {
 				this.$confirm('此操作将停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
@@ -213,10 +353,12 @@
 					message: '刷新成功了哟，点击可关闭',
 					type: 'success'
 				});
+				this.init();
 			},
 			handleChange(value) {
 			console.log(value);
-			}
+			},
+			
 		}
 	}
 </script>
@@ -247,4 +389,13 @@
 	.el-button+.el-button {
 		margin-left: 0;
 	}
+	select {
+		width: 90px;
+		height: 35px;
+		border: 1px solid #C1CBDA;
+		border-radius: 5px;
+		margin-right: 10px;
+	}
+	
+	
 </style>
