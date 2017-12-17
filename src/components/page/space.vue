@@ -48,10 +48,12 @@
 			</el-dialog>
 
 			<el-button size="medium" type="success" @click="open3">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6">停用</el-button>
+			<!--<el-button size="medium" type="danger" @click="open6">停用</el-button>-->
 
 		</div>
 		
+		
+		<!--修改对话框-->
 		<el-dialog title="修改" :visible.sync="dialogFormVisibles">
 				<el-form :model="form">
 					<el-form-item label="空间名称" :label-width="formLabelWidth">
@@ -124,13 +126,13 @@
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
-					<router-link to="../member">
+					<!--<router-link to="../member">
 						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >成员管理</el-button>
-					</router-link>
-
-					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-
-					<el-button size="mini" type="primary" @click="dialogFormVisible = true">设置</el-button>
+					</router-link>-->
+					
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
+					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -221,12 +223,10 @@
 
 		},
 		created() {
-
 			this.init();
 			this.deviceinfo();
 
 		},
-
 		methods: {
 			handleEdit(index,row){
 
@@ -241,11 +241,18 @@
 			},
 			// 获取
 			init() {
-				if(window.localStorage){ 
+				
+				if(window.localStorage){
 				if(!str){
                      str=localStorage.getItem("str")
 				}
 				localStorage.setItem("str",str);
+			}
+				if(window.localStorage){
+				if(!orgids){
+                     orgids=localStorage.getItem("orgids")
+				}
+				localStorage.setItem("orgids",orgids);
 			}
 				
 				axios.get(api.apidomain +'space/list/'+ str +'?n=100&p=1', {
@@ -294,7 +301,6 @@
 						console.log(error);
 						console.log('网络错误');
 					});
-					
 					this.dialogFormVisible = false,
 					this.init();
 		
@@ -320,13 +326,15 @@
 						console.log('网络错误');
 					});
 					
-					this.dialogFormVisible = false,
+					this.dialogFormVisibles = false,
 					this.init();
 		
 			},
 			
-			open6() {
-				this.$confirm('此操作将停用该数据 , 是否继续呢?', '提示', {
+			open6(index, row) {
+				axios.post(api.apidomain + 'space/updateStatus/'+ row.id +'?status=0',{
+				});	
+				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning',
@@ -342,6 +350,8 @@
 						message: '已取消停用'
 					});
 				});
+				this.dialogFormVisible = false;
+				this.init();
 
 			},
 			open3() {

@@ -22,31 +22,9 @@
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
 
-					<!--<el-form-item label="角色选择" :label-width="formLabelWidth">
-						<el-select v-model="form.region" placeholder="请选择角色">
-							<el-option label="管理员" value="shanghai"></el-option>
-							<el-option label="用户" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>-->
-
 					<el-form-item label="设备ID" :label-width="formLabelWidth">
 						<el-input v-model="form.device_name" auto-complete="off"></el-input>
 					</el-form-item>
-
-					<el-form-item label="角色类型" :label-width="formLabelWidth">
-						<el-input v-model="form.role" auto-complete="off"></el-input>
-					</el-form-item>
-
-					<!--下拉菜单选择后期开发-->
-					<!--<el-dropdown>
-						<span class="el-dropdown-link">选择<i class="el-icon-arrow-down el-icon--right"></i></span>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>用户</el-dropdown-item>
-							<el-dropdown-item>维护员</el-dropdown-item>
-							<el-dropdown-item disabled>管理员</el-dropdown-item>
-							<el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>-->
 
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.telephone" auto-complete="off"></el-input>
@@ -79,14 +57,10 @@
 			</el-table-column>
 			<el-table-column prop="iccd" label="控制器ID">
 			</el-table-column>
-			<el-table-column prop="device_model" label="设备状态">
+			<el-table-column prop="device_name" label="设备状态">
 			</el-table-column>
 			<el-table-column prop="factory_time" label="已使用时长" width="180">
 			</el-table-column>
-			<el-table-column prop="last_maintain_time" label="账户剩余时长 ">
-			</el-table-column>
-			
-			
 
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -95,7 +69,7 @@
 					<!--<el-switch style="display: block" v-model="value4" active-color="#13ce66" inactive-color="#ff4949" active-text="按月付费" inactive-text="按年付费">
 					</el-switch>-->
 					
-					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 

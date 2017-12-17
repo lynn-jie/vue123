@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<!--<v-pageTitle vtitle="EditorPage"></v-pageTitle>-->
-		<h2>用户管理</h2>
+		<h2>用户列表查看</h2>
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>用户管理</el-breadcrumb-item>
+				<el-breadcrumb-item>用户列表</el-breadcrumb-item>
 
 			</el-breadcrumb>
 
@@ -69,8 +69,8 @@
 				</div>
 			</el-dialog>
 
-			<el-button size="medium" type="success" @click="open3">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6">删除</el-button>
+			<!--<el-button size="medium" type="success" @click="open3">刷新</el-button>
+			<el-button size="medium" type="danger" @click="open6">删除</el-button>-->
 
 		</div>
 
@@ -91,15 +91,15 @@
 			
 			
 
-			<el-table-column label="操作">
+			<!--<el-table-column label="操作">
 				<template slot-scope="scope">
 
-					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
 					
 
 				</template>
-			</el-table-column>
+			</el-table-column>-->
 		</el-table>
 
 		<div class="paging block">

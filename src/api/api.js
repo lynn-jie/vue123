@@ -4,7 +4,7 @@ import axios from 'axios';
 export default{
 	
 
-    apidomain: 'http://localhost:6688/manager/' // 所有数据api的域名地址
+    apidomain: '/manager/' // 所有数据api的域名地址
   
   
 //    测试网网址

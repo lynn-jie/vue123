@@ -38,7 +38,7 @@
 			</el-dialog>
 
 			<el-button size="medium" type="success" @click="open3()">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6()">停用</el-button>
+			<!--<el-button size="medium" type="danger" @click="open6()">停用</el-button>-->
 
 		</div>
 
@@ -111,7 +111,7 @@
 					</router-link>
 
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
 				
 				</template>
 			</el-table-column>
@@ -191,24 +191,11 @@
 				this.form.orgcount = row.orgcount;
 			},
 //			删除
-			handleDelete(index, row) {
-				console.log(index, row);
+			open6(index, row) {
+//				console.log(index, row);
 				axios.post(api.apidomain + 'customer/updateStatus/'+ row.id +'?status=0',{
-					})
-					.then(response => {
-						alert('删除成功');
-					})
-					.catch(error => {
-						console.log(error);
-						console.log('网络错误');
-					});
-				this.dialogFormVisible = false;
-				this.init();
-			},
-				
-
-			open6() {
-				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
+				});		
+				this.$confirm('此操作将该数据删除 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning',
@@ -224,6 +211,8 @@
 						message: '已取消停用'
 					});
 				});
+				this.dialogFormVisible = false;
+				this.init();
 
 			},
 			//	    刷新控件

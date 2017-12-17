@@ -63,7 +63,7 @@
 			</el-dialog>
 
 			<el-button size="medium" type="success" @click="open3">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6">停用</el-button>
+			<!--<el-button size="medium" type="danger" @click="open6">停用</el-button>-->
 
 		</div>
 		
@@ -169,7 +169,7 @@
 
 					</router-link>
 					
-					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 

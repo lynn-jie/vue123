@@ -218,6 +218,7 @@
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
+						alert('亲，您的手机号已经存在，请修改后提交')
 
 					});
 				this.dialogFormVisible = false;
