@@ -165,12 +165,13 @@
 
 					<router-link to="../space">
 						<!--<el-button size="mini" type="warning" @send="">空间管理</el-button>-->
-						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">机构管理</el-button>
+						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">空间管理</el-button>
 
 					</router-link>
 					
 					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 
 				</template>
 				
@@ -193,9 +194,7 @@
 		str = count;
 		
 	});
-	
-	
-	
+
 	
 	export default {
 
@@ -284,7 +283,20 @@
 			sendId(index, row) {
 				vm.$emit(orgid,row.id)
 			},
-			
+			handleDelete(index, row) {
+				console.log(index, row);
+				axios.post(api.apidomain + 'org/updateStatus/'+ row.id +'?status=0',{
+					})
+					.then(response => {
+						alert('删除成功');
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+				this.dialogFormVisible = false;
+				this.init();
+			},
 			
 //          对话框form添加数据
 			handleEdit(index,row){

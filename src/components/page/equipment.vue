@@ -70,7 +70,7 @@
 			</el-dialog>
 
 			<el-button size="medium" type="success" @click="open3">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6">删除</el-button>
+			<!--<el-button size="medium" type="danger" @click="open6">删除</el-button>-->
 
 		</div>
 
@@ -92,8 +92,12 @@
 				<template slot-scope="scope">
 
 					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
-					<el-switch style="display: block" v-model="value4" active-color="#13ce66" inactive-color="#ff4949" active-text="按月付费" inactive-text="按年付费">
-					</el-switch>
+					<!--<el-switch style="display: block" v-model="value4" active-color="#13ce66" inactive-color="#ff4949" active-text="按月付费" inactive-text="按年付费">
+					</el-switch>-->
+					
+					<el-button size="mini"type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 
 				</template>
 			</el-table-column>

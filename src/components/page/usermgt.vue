@@ -29,12 +29,9 @@
 						</el-select>
 					</el-form-item>-->
 
-					<el-form-item label="设备ID" :label-width="formLabelWidth">
-						<el-input v-model="form.device_name" auto-complete="off"></el-input>
-					</el-form-item>
 
-					<el-form-item label="角色类型" :label-width="formLabelWidth">
-						<el-input v-model="form.role" auto-complete="off"></el-input>
+					<el-form-item label="姓名" :label-width="formLabelWidth">
+						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
 
 					<!--下拉菜单选择后期开发-->
@@ -49,23 +46,21 @@
 					</el-dropdown>-->
 
 					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.telephone" auto-complete="off"></el-input>
+						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="邮箱" :label-width="formLabelWidth">
-						<el-input v-model="form.email" auto-complete="off"></el-input>
+						<el-input v-model="form.mail" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="日期" :label-width="formLabelWidth">
-						<el-col :span="11">
-							<el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
-						</el-col>
-
+					<el-form-item label="密码" :label-width="formLabelWidth">
+						<el-input v-model="form.passwd" auto-complete="off"></el-input>
 					</el-form-item>
+					
 
 				</el-form>
 
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
-					<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+					<el-button type="primary" @click="add">确 定</el-button>
 				</div>
 			</el-dialog>
 
@@ -123,15 +118,8 @@
 	let str = '';
 	
 	vm.$on(cusid,(count)=>{
-		
 		str = count
-		
 	});
-	
-	
-	
-	
-	
 	
 	export default {
 		data() {
@@ -171,7 +159,16 @@
 					delivery: false,
 					type: [],
 					resource: '',
-					desc: ''
+					desc: '',
+					last_login_time:'',
+					phone: '',
+					status: '',
+					mail: '',
+					reg_time: '',
+					customerId: '',
+					id: '',
+					passwd: '',
+
 				},
 				formLabelWidth: '120px'
 			}
@@ -183,9 +180,14 @@
 		
 
 		},
-		methods: {
-			
+		methods: {	
 			init() {
+				if(window.localStorage){ 
+				if(!str){
+                     str=localStorage.getItem("str")
+				}
+				localStorage.setItem("str",str);
+			}
 				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
 				
 
@@ -200,6 +202,32 @@
 						console.log('网络错误');
 						
 					});
+			},		
+			// 添加
+			
+			add() {
+				axios.post(api.apidomain + 'user', {
+//					    id: this.form.id,
+					    customerId:str,
+						name: this.form.name,
+						phone: this.form.phone,
+						mail: this.form.mail,
+						passwd:this.form.passwd,
+
+					})
+					.then(response => {
+						//			console.log(this.tableData);
+						//			console.log(123)
+						//			alert('恭喜添加成功！');
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+
+					});
+				this.dialogFormVisible = false;
+				this.init();
+
 			},
 //		
 			open6() {

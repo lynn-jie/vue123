@@ -134,7 +134,7 @@
 
 	import api from '../../api/api.js';
 
-	import { vm, cusid } from "../../common/vm.js";
+	import { vm, cusid ,orgid } from "../../common/vm.js";
 
 	export default {
 		data() {
@@ -179,6 +179,7 @@
 		methods: {
 			sendId(index, row) {
 				vm.$emit(cusid, row.id)
+				
 			},
 			//修改
 			handleEdit(index,row){
@@ -191,10 +192,20 @@
 			},
 //			获取删除行
 			handleDelete(index, row) {
-//				this.customerId = row.customerId;
-//				this.status = !row.status;
 				console.log(index, row);
+				axios.post(api.apidomain + 'customer/updateStatus/'+ row.id +'?status=0',{
+					})
+					.then(response => {
+						alert('删除成功');
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+				this.dialogFormVisible = false;
+				this.init();
 			},
+				
 
 			open6() {
 				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
@@ -264,6 +275,7 @@
 					})
 					.then(response => {
 						this.tableData = response.data.data;
+						console.log(response)
 					})
 					.catch(error => {
 						console.log(error);

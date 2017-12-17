@@ -156,16 +156,14 @@
 	let str = '';
 	let orgids = '';
 	
-
-	
 	
 	vm.$on(cusid,(count)=>{
 		str = count
 	});
 	
 	
-	vm.$on(orgid,(count)=>{
-		orgids = count
+	vm.$on(orgid,(qwer)=>{
+		orgids = qwer
 	});
 	
 //	localStorage.setItem("qwer",str);
@@ -281,12 +279,13 @@
 			
 			// 添加
 			add() {
+				console.log(str);
 				axios.post(api.apidomain + 'space', {
 						deviceId:this.form.deviceId,
 						name:this.form.name,
 						cleanerAmount:this.form.cleanerAmount,
-						orgId:orgids,
 						customerId:str,
+						orgId:orgids,
 						
 					})
 					.then(response => {
