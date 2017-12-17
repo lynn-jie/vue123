@@ -16,87 +16,98 @@
 		<div class="btn">
 
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
-
-			<!--内嵌表格-->
-
+			<el-button size="medium" type="success" @click="open3">刷新</el-button>
+			<!--新增内嵌表格-->
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
-
-					<!--<el-form-item label="角色选择" :label-width="formLabelWidth">
-						<el-select v-model="form.region" placeholder="请选择角色">
-							<el-option label="管理员" value="shanghai"></el-option>
-							<el-option label="用户" value="beijing"></el-option>
-						</el-select>
-					</el-form-item>-->
-
 
 					<el-form-item label="姓名" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-
-					<!--下拉菜单选择后期开发-->
-					<!--<el-dropdown>
-						<span class="el-dropdown-link">选择<i class="el-icon-arrow-down el-icon--right"></i></span>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>用户</el-dropdown-item>
-							<el-dropdown-item>维护员</el-dropdown-item>
-							<el-dropdown-item disabled>管理员</el-dropdown-item>
-							<el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-						</el-dropdown-menu>
-					</el-dropdown>-->
-
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="邮箱" :label-width="formLabelWidth">
 						<el-input v-model="form.mail" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="密码" :label-width="formLabelWidth">
-						<el-input v-model="form.passwd" auto-complete="off"></el-input>
+					<el-form-item  label="密码" :label-width="formLabelWidth">
+						<el-input type="password" v-model="form.passwd" auto-complete="off"></el-input>
 					</el-form-item>
-					
-
 				</el-form>
-
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
 					<el-button type="primary" @click="add">确 定</el-button>
 				</div>
 			</el-dialog>
-
-			<el-button size="medium" type="success" @click="open3">刷新</el-button>
-			<el-button size="medium" type="danger" @click="open6">删除</el-button>
-
 		</div>
+		<!--修改对话框-->
+		<div id="modify">
+			<el-dialog title="修改" :visible.sync="dialogFormVisibles">
+				<el-form :model="form">
 
+					<el-form-item label="姓名" :label-width="formLabelWidth">
+						<el-input v-model="form.name" auto-complete="off"></el-input>
+					</el-form-item>
+					<el-form-item label="电话" :label-width="formLabelWidth">
+						<el-input v-model="form.phone" auto-complete="off"></el-input>
+					</el-form-item>
+					<el-form-item label="邮箱" :label-width="formLabelWidth">
+						<el-input v-model="form.mail" auto-complete="off"></el-input>
+					</el-form-item>
+					<el-form-item  label="密码" :label-width="formLabelWidth">
+						<el-input type="password" v-model="form.passwd" auto-complete="off"></el-input>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisibles = false">取 消</el-button>
+					<el-button type="primary" @click="modify">确 定</el-button>
+				</div>
+			</el-dialog>
+		</div>
+		
+		
+		
+		<!--标题栏-->
 		<el-table :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="name" label="用户名称">
+			<el-table-column  label="用户名称">
+				<template slot-scope="scope">
+					<p>{{ scope.row.name }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="phone" label="电话">
+			<el-table-column  label="电话">
+				<template slot-scope="scope">
+					<p>{{ scope.row.phone }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="last_login_time" label="最后登陆时间" width="180">
+			<el-table-column label="最后登陆时间" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.last_login_time }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="status" label="状态 ">
+			<el-table-column  label="状态 ">
+				<template slot-scope="scope">
+					<p>{{ scope.row.status }}</p>
+				</template>
 			</el-table-column>
 			<el-table-column prop="customer_id	" label="注册时间">
+				<template slot-scope="scope">
+					<p>{{ scope.row.customer_id }}</p>
+				</template>
 			</el-table-column>
 			
-			<!--<el-table-column label="操作">
+			<el-table-column label="操作">
 				<template slot-scope="scope">
 
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-					<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>
+					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
+					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
 					
-
 				</template>
-			</el-table-column>-->
-			
+			</el-table-column>
 		</el-table>
-
 		<div class="paging block">
-
 			<!-- <span class="demonstration">调整每页显示条数</span>-->
 			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
 			</el-pagination>
@@ -129,28 +140,18 @@
 //					status: '离线',
 //					iccd: '250小时',
 //					surplus: '2800小时'
-				}
-				,
+				},
 //				{
 //					controlid: 'X12332JSA12SH',
 //					status: '在线',
 //					time: '250小时',
 //					surplus: '2800小时'
 //
-//				}, {
-//					controlid: 'Q12332JSA12SH',
-//					status: '在线',
-//					time: '250小时',
-//					surplus: '2808小时'
-//				}, {
-//					controlid: 'Z12332JSA12SH',
-//					status: '离线',
-//					time: '250小时',
-//					surplus: '1280小时'
-//				}
+//				}, 
 				],
 				value4: true,
 				dialogFormVisible: false,
+				dialogFormVisibles: false,
 				form: {
 					device_name: '',
 					ctrl_phone_number: '',
@@ -175,10 +176,8 @@
 
 		},
 		created() {
-
 			this.init();
 		
-
 		},
 		methods: {	
 			init() {
@@ -189,8 +188,6 @@
 				localStorage.setItem("str",str);
 			}
 				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
-				
-
 					})
 					.then(response => {
 						console.log(response);
@@ -200,11 +197,9 @@
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
-						
 					});
 			},		
 			// 添加
-			
 			add() {
 				axios.post(api.apidomain + 'user', {
 //					    id: this.form.id,
@@ -227,11 +222,13 @@
 					});
 				this.dialogFormVisible = false;
 				this.init();
-
 			},
-//		
-			open6() {
-				this.$confirm('此操作将永久删除该数据 , 是否继续呢?', '提示', {
+		//  删除
+			open6(index, row) {
+				axios.post(api.apidomain + 'user/updateStatus/'+ row.id +'?status=0',{
+					
+				})
+				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning',
@@ -239,7 +236,7 @@
 				}).then(() => {
 					this.$message({
 						type: 'success',
-						message: '删除成功!'
+						message: '删除成功'
 					});
 				}).catch(() => {
 					this.$message({
@@ -247,14 +244,48 @@
 						message: '已取消删除'
 					});
 				});
+			},
+//			修改
+			handleEdit(index,row){
+				this.dialogFormVisibles = true;
+				this.form.name = row.name;
+				this.form.phone = row.phone;
+				this.form.mail = row.mail;
+				this.form.passwd = row.passwd;
+				this.form.id = row.id;
+				
+			},
+			modify() {
+				axios.put(api.apidomain + 'user', {
+						id:this.form.id,
+						customerId:str,
+						name: this.form.name,
+						phone: this.form.phone,
+						mail: this.form.mail,
+						passwd:this.form.passwd,		
+
+					})
+					.then(response => {
+						//			console.log(this.tableData);
+						//			console.log(123)
+						//			alert('恭喜添加成功！');
+					})
+					.catch(error => {
+						console.log(error);
+						console.log('网络错误');
+					});
+				this.dialogFormVisibles = false;
+				this.init();
 
 			},
+//			刷新
 			open3() {
 				this.$notify({
 					title: '成功',
 					message: '刷新成功了哟，点击可关闭',
 					type: 'success'
 				});
+				this.init();
 			}
 		}
 	}

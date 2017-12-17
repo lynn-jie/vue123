@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!--<v-pageTitle vtitle="EditorPage"></v-pageTitle>-->
+		
 		<h2>成员管理</h2>
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
@@ -179,12 +179,12 @@
 				axios.get(api.apidomain +'user/inspace/'+ str +'?n=100&p=1', {
 					})
 					.then(response => {
-						console.log(response);
+					
 						this.tableData = response.data.data;
 
 					})
 					.catch(error => {
-						console.log(error);
+//						console.log(error);
 						console.log('网络错误');
 						
 					});

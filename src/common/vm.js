@@ -1,8 +1,8 @@
 import Vue from 'vue';
 
-export let cusid = "";
+export const cusid = "cusid";
 
-export let orgid = "";
+export const orgid = "orgid";
 
 export let vm = new Vue();
 

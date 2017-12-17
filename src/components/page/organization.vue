@@ -281,10 +281,11 @@
 
 		methods: {
 			sendId(index, row) {
+			
 				vm.$emit(orgid,row.id)
 			},
 			handleDelete(index, row) {
-				console.log(index, row);
+			
 				axios.post(api.apidomain + 'org/updateStatus/'+ row.id +'?status=0',{
 					})
 					.then(response => {
@@ -300,7 +301,7 @@
 			
 //          对话框form添加数据
 			handleEdit(index,row){
-				console.log(index,row);
+			
 				this.dialogFormVisibles = true;
 				this.form.id = row.id;
 				this.form.name = row.name;
@@ -327,13 +328,11 @@
 				axios.get(api.apidomain + 'org/list/' + str + '?n=100&p=1', {
 					})
 					.then(response => {
-						console.log('*******');
-						console.log(response);
-						console.log('*******');
+						
 						this.tableData = response.data.data;
 						//	alert('成功')
 						
-						console.log(response.data);
+						
 					})
 					.catch(error => {
 						console.log(error);
@@ -359,7 +358,6 @@
 			},
 			// 添加
 			add() {
-				console.log(str);
 				axios.post(api.apidomain + 'org', {
 						customerId:str,
 						name:this.form.name,
@@ -370,7 +368,7 @@
 						address:this.form.address
 					})
 					.then(response => {
-						console.log(response);
+						
 //						alert('成功')
 					})
 					.catch(error => {

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!--<v-pageTitle vtitle="EditorPage"></v-pageTitle>-->
+		
 
 		<h2>客户管理</h2>
 
@@ -26,10 +26,10 @@
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="机构数量" :label-width="formLabelWidth">
-						<el-input v-model="form.orgcount" auto-complete="off"></el-input>
+					<!--<el-form-item label="机构数量" :label-width="formLabelWidth">
+						<el-input v-model="form.orgcount" auto-complete="off"></el-input>-->
 						<!--<el-input-number v-model="form.orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
-					</el-form-item>
+					<!--</el-form-item>-->
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -54,11 +54,11 @@
 					<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="机构数量" :label-width="formLabelWidth">
+					<!--<el-form-item label="机构数量" :label-width="formLabelWidth">-->
 						<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
 						<!--<el-input-number v-model="orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
-						<el-input v-model="form.orgcount" auto-complete="off"></el-input>
-					</el-form-item>
+						<!--<el-input v-model="form.orgcount" auto-complete="off"></el-input>-->
+					<!--</el-form-item>-->
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisibles = false">取 消</el-button>
@@ -86,7 +86,7 @@
 				</template>
 			</el-table-column>
 			
-			<el-table-column  label="机构数量">
+			<el-table-column  label="空间数量">
 				<template slot-scope="scope">
 					<p>{{ scope.row.orgcount }}</p>
 				</template>
@@ -110,7 +110,7 @@
 						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)">机构管理</el-button>
 					</router-link>
 
-					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				
 				</template>
@@ -190,7 +190,7 @@
 				this.form.phone = row.phone;
 				this.form.orgcount = row.orgcount;
 			},
-//			获取删除行
+//			删除
 			handleDelete(index, row) {
 				console.log(index, row);
 				axios.post(api.apidomain + 'customer/updateStatus/'+ row.id +'?status=0',{
@@ -336,7 +336,6 @@
 
 			},
 			
-
 		}
 	}
 </script>

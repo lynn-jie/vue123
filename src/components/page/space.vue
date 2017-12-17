@@ -229,7 +229,7 @@
 
 		methods: {
 			handleEdit(index,row){
-//				console.log(index,row);
+
 				this.dialogFormVisibles = true;
 				this.form.customerId = row.customerId;
 				this.form.name = row.name;
@@ -252,10 +252,9 @@
 					
 					})
 					.then(response => {
-						console.log(response);
+					
 						this.tableData = response.data.data;
-						console.log('----------------------')
-						console.log(response.data)
+		
 					})
 					.catch(error => {
 						console.log(error);
@@ -267,11 +266,11 @@
 				axios.get(api.apidomain +'deviceinfo/search?n=100&p=1', {
 					})
 					.then(response => {
-						console.log(response);
+						
 						this.deviceinfos = response.data.data;
 					})
 					.catch(error => {
-						console.log(error);
+						
 						console.log('网络错误');
 						
 					});
@@ -289,7 +288,6 @@
 						
 					})
 					.then(response => {
-						console.log(response);
 //						alert('成功')
 					})
 					.catch(error => {

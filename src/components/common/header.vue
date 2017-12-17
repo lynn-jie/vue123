@@ -117,7 +117,7 @@
                         <el-dropdown-item divided>
                             <div class="setting-div">
                                 <span class="setting-icon"><i class="material-icons">assignment_return</i></span> 
-                                <span class="setting-string"> Sign out  退出</span>
+                                <span class="setting-string" @click="remove"> Sign out  退出</span>
                             </div>
                             
                         </el-dropdown-item>
@@ -165,7 +165,10 @@
             }
         },
         methods:{
-            
+            remove(){
+            	sessionStorage.removeItem("state")
+						this.$router.push({path:"/login"})
+            }
         }
     }
 </script>

@@ -20,53 +20,93 @@ import tests from '@/components/page/tests';
 
 Vue.use(Router)
 
-export default new Router({
+ const router = new Router({
 mode:'hash',
   base:__dirname,
   routes: [
-    {
+		{
+        path:'/login',
+        component:login,
+      },
+    	{
       path: '/',
       component: Home,
+      meta:{requiresAuth:true},
       children:[
         {
         	 path:'',
-          component:DashBoard
+          component:DashBoard,
+          meta:{requiresAuth:true},
         },
         {
           path: '/DashBoard', 
-          component: DashBoard
+          component: DashBoard,
+          meta:{requiresAuth:true},
     		},{
           path: '/customer', 
           component: customer
     		},{
           path: '/organization', 
-          component: organization
+          component: organization,
+          meta:{requiresAuth:true},
     		},{
           path:'/equipment',
-          component:equipment
+          component:equipment,
+          meta:{requiresAuth:true},
         },{
           path:'/FormLayouts',
-          component:FormLayouts
+          component:FormLayouts,
+          meta:{requiresAuth:true},
         },{
           path:'/BasicTables',
-          component:BasicTables
+          component:BasicTables,
+          meta:{requiresAuth:true},
+          
         },{
           path:'/space',
-          component:space
+          component:space,
+          meta:{requiresAuth:true},
+          
         },{
           path:'/member',
-          component:member
+          component:member,
+          meta:{requiresAuth:true},
+          
         },
         {
           path:'/usermgt',
-          component:usermgt
+          component:usermgt,
+          meta:{requiresAuth:true},
+          
         },{
         	path:'/tests',
-          component:tests
+          component:tests,
+          meta:{requiresAuth:true},
+          
         }
  
       ]
     }
+    
   ]
 })
 
+router.beforeEach((to, from, next) => {
+	
+if (to.matched.some(record => record.meta.requiresAuth)) {
+    // this route requires auth, check if logged in
+    // if not, redirect to login page.
+    if (!sessionStorage.getItem("state")) {
+
+      next({
+        path: '/login',
+//      query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+} else {
+    next( ) // 确保一定要调用 next()
+}
+})
+export default router;
