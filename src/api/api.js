@@ -4,11 +4,16 @@ import axios from 'axios';
 export default{
 	
 
-    apidomain: '/manager/' // 所有数据api的域名地址
+    apidomain:'http://localhost:6688/manager/',    // 测试
+    apicd:'http://localhost:6688/api/',           //测试
+    
+//  apidomain:'/manager/',    // 所有数据api的域名地址
+//  apicd:'/api/',            //上线
+    
   
   
 //    测试网网址
-//    'http://localhost/manager/'
+//    'http://localhost:6688/manager/'
 //    上线网址
 //    '/manager/'
 
