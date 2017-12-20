@@ -3,14 +3,17 @@
         <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router>
             <el-menu-item index="DashBoard">
                
-                    <!--<span class="sb-icon"><i class="material-icons">home</i></span>-->
+                    <span class="sb-icon">
+                    	<i class="iconfont icon-zhuye"></i>
+                    </span>
                     <span class="sb-cn">主页</span>
             </el-menu-item>
 
             <el-submenu index="2">
                 <template slot="title">
-               
-                    <span class="sb-icon"><i class="material-icons">perm_data_setting</i></span>
+                    <span class="sb-icon">
+                    	<i class="iconfont icon-kehu"></i>
+                    </span>
                     <span class="sb-cn">客户中心</span>
                  
                 </template>
@@ -28,7 +31,9 @@
 
             <el-submenu index="3">
                 <template slot="title">
-                    <span class="sb-icon"><i class="material-icons">pie_chart</i></span>
+                    <span class="sb-icon">
+                    	<i class="iconfont icon-shebeiguanli"></i>
+                    </span>
                     <span class="sb-cn">设备中心</span>
                 </template>
                 <el-menu-item index="equipment">设备列表</el-menu-item>
@@ -36,7 +41,9 @@
 
             <el-submenu index="4">
                 <template slot="title">
-                    <span class="sb-icon"><i class="material-icons">content_paste</i></span>
+                    <span class="sb-icon">
+                    	<i class="iconfont icon-yonghu"></i>
+                    </span>
                     <span class="sb-cn">用户中心</span>
                 </template>
                 

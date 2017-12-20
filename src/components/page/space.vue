@@ -6,10 +6,9 @@
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>客户管理</el-breadcrumb-item>
-				<el-breadcrumb-item>机构管理</el-breadcrumb-item>
-				<el-breadcrumb-item>空间管理</el-breadcrumb-item>
-
+				<el-breadcrumb-item :to="{ path: '/customer'}">客户管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ path: '/organization'}">机构管理</el-breadcrumb-item>
+				<el-breadcrumb-item >空间管理</el-breadcrumb-item>
 			</el-breadcrumb>
 
 		</div>
@@ -66,7 +65,7 @@
 					</el-form-item>
 				
 				<el-form-item label="设备ID" :label-width="formLabelWidth">
-							<select >
+							<select id="p" v-model="form.deviceId">
 								<option value="">请选择</option>
 								<option v-for="item in deviceinfos">{{ item.id }}</option>
 							</select>
@@ -82,7 +81,7 @@
 		
 		
 		<!--标题栏-->
-		<el-table :data="tableData" style="width: 100%" class="table">
+		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			
@@ -96,6 +95,11 @@
 					<p>{{ scope.row.deviceIccd }}</p>
 				</template>
 			</el-table-column>
+			<el-table-column label="控制器名称">
+				<template slot-scope="scope">
+					<p>{{ scope.row.deviceName }}</p>
+				</template>
+			</el-table-column>
 			<el-table-column label="净化器数量">
 				<template slot-scope="scope">
 					<p>{{ scope.row.cleanerAmount }}</p>
@@ -106,19 +110,16 @@
 					<p>{{ scope.row.admin }}</p>
 				</template>
 			</el-table-column>
-			<el-table-column label="创建日期" width="180">
-				<template slot-scope="scope">
-					<p>{{ scope.row.createTime }}</p>
-				</template>
-			</el-table-column>
-			<el-table-column  label="在线数量" width="180">
+			
+			<el-table-column  label="成员数量" width="180">
 				<template slot-scope="scope">
 					<p>{{ scope.row.memberCount }}</p>
 				</template>
 			</el-table-column>
-			<el-table-column  label="余额" width="180">
+			
+			<el-table-column label="创建日期" width="180">
 				<template slot-scope="scope">
-					<p>{{ scope.row.balance }}</p>
+					<p>{{ scope.row.createTime }}</p>
 				</template>
 			</el-table-column>
 			
@@ -132,16 +133,18 @@
 					
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
-					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
-		<!--<div class="paging block">
-			
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+
+		<!--分页栏-->
+		<div class="paging block">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
 			</el-pagination>
-		</div>-->
+		</div>
+
 	</div>
 </template>
 
@@ -152,7 +155,6 @@
 	import api from '../../api/api.js';
 	
 	import {vm, cusid, orgid} from "../../common/vm.js";
-	
 	
 	
 	let str = '';
@@ -167,12 +169,9 @@
 	vm.$on(orgid,(qwer)=>{
 		orgids = qwer
 	});
-	
-//	localStorage.setItem("qwer",str);
-	
+
 	
 	export default {
-
 		data() {
 			return {
 				tableData: [
@@ -211,14 +210,17 @@
 					deviceIccd:'',
 					status:'',
 					memberCount:'',
-//					customerId:'str',
 					id:'',
 					balance:'',
-//					orgId:'orgids',
+					deviceName:'',
 				},
+				// 接收省数据
 				deviceinfos:[],
-				
-				
+				currentPage: 1,
+				total: 0,
+				size: 100,
+				pages: 1,
+				loading: false,
 			}
 
 		},
@@ -228,110 +230,124 @@
 
 		},
 		methods: {
+			
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
+			},
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
+			},
 			handleEdit(index,row){
-
 				this.dialogFormVisibles = true;
+				this.form.id = row.id;
 				this.form.customerId = row.customerId;
 				this.form.name = row.name;
 				this.form.cleanerAmount = row.cleanerAmount;
 				this.form.orgId = row.orgId;
 				this.form.deviceId = row.deviceId;
 				
-				
 			},
-			// 获取
+			// 修改
+			modify(){
+				axios.put(api.apidomain + 'space/'+ this.form.id, {
+						
+						deviceId:this.form.deviceId,
+						name:this.form.name,
+						cleanerAmount:this.form.cleanerAmount,
+						customerId:str,
+						orgId:orgids,
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
+						this.init();
+					})
+					.catch(error => {
+						console.log(error);
+					});
+					
+					this.dialogFormVisibles = false;
+		
+			},
+			// 获取数据列表
 			init() {
 				
+				// 获取上一级id存到localStorage防止手动刷新错误
 				if(window.localStorage){
 				if(!str){
                      str=localStorage.getItem("str")
 				}
 				localStorage.setItem("str",str);
 			}
+				
 				if(window.localStorage){
 				if(!orgids){
                      orgids=localStorage.getItem("orgids")
 				}
 				localStorage.setItem("orgids",orgids);
 			}
-				
-				axios.get(api.apidomain +'space/list/'+ str +'?n=100&p=1', {
-					
+				axios.get(api.apidomain +'space/list/'+ str, {
+					params: {
+							n: this.size,
+							p: this.pages,
+					}
 					})
 					.then(response => {
-					
 						this.tableData = response.data.data;
-		
+						this.tableData = response.data.data;
+						this.total = response.data.total;
+						this.size = response.data.size;
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
-						
+						console.log('错误');
 					});
 			},
+			// 获取设备id
 			deviceinfo() {
-				axios.get(api.apidomain +'deviceinfo/search?n=100&p=1', {
+				axios.get(api.apidomain +'deviceinfo/search?n=1000&p=1', {
 					})
 					.then(response => {
 						
 						this.deviceinfos = response.data.data;
 					})
 					.catch(error => {
-						
-						console.log('网络错误');
+						console.log(error);
+						console.log('错误');
 						
 					});
 			},
-			
 			// 添加
 			add() {
-				console.log(str);
 				axios.post(api.apidomain + 'space', {
 						deviceId:this.form.deviceId,
 						name:this.form.name,
 						cleanerAmount:this.form.cleanerAmount,
+						createTime:this.form.createTime,
 						customerId:str,
 						orgId:orgids,
 						
 					})
 					.then(response => {
-//						alert('成功')
+//					
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
 					});
-					this.dialogFormVisible = false,
-					this.init();
-		
-			},
-			// 修改
-			modify(){
-				axios.post(api.apidomain + 'space', {
-						customerId:str,
-						name:this.form.name,
-						tel:this.form.tel,
-						provinceId:this.provinceId,
-						cityId:this.cityId,
-						countyId:this.countyId,
-						address:this.form.address
-					})
-					.then(response => {
-						console.log(response);
-						this.tableData = response.data.data;
-//						alert('成功')
-					})
-					.catch(error => {
-						console.log(error);
-						console.log('网络错误');
-					});
-					
-					this.dialogFormVisibles = false,
-					this.init();
-		
+					this.dialogFormVisible = false;
 			},
 			
-			open6(index, row) {
+			// 删除
+			handleDelete(index, row) {
 				axios.post(api.apidomain + 'space/updateStatus/'+ row.id +'?status=0',{
 				});	
 				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
@@ -342,18 +358,19 @@
 				}).then(() => {
 					this.$message({
 						type: 'success',
-						message: '停用成功!'
+						message: '删除成功!'
 					});
+					this.init();
 				}).catch(() => {
 					this.$message({
 						type: 'info',
-						message: '已取消停用'
+						message: '已取消删除'
 					});
 				});
 				this.dialogFormVisible = false;
-				this.init();
-
+				
 			},
+			// 刷新
 			open3() {
 				this.$notify({
 					title: '成功',

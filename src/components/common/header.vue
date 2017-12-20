@@ -58,8 +58,9 @@
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
-                     </el-col>    
-                    <el-col :span="8">  
+                     </el-col>  
+                     
+                    <!--<el-col :span="8">  
                         <el-dropdown menu-align="start"  >
                             <span >
                                 <el-badge :value="3" class="item">
@@ -88,7 +89,7 @@
 
                             </el-dropdown-menu>
                         </el-dropdown>
-                     </el-col>   
+                     </el-col>   -->
 
 
                 </div>
@@ -103,21 +104,27 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item >
                             <div class="setting-div">
-                                <span class="setting-icon"><i class="material-icons">account_box</i></span> 
-                                <span class="setting-string"> Profile  个人</span>
+                                <span class="setting-icon">
+                                	<i class="iconfont icon-gerenzhongxin"></i>
+                                </span> 
+                                <span class="setting-string"> 个人中心</span>
                             </div>
                         </el-dropdown-item>
                         <el-dropdown-item divided>
                             <div class="setting-div">
-                                <span class="setting-icon"><i class="material-icons">settings</i></span> 
-                                <span class="setting-string"> Settings  设置</span>
+                                <span class="setting-icon">
+                                	<i class="iconfont icon-shezhi"></i>
+                                </span> 
+                                <span class="setting-string"> 设置</span>
                             </div>
                          
                         </el-dropdown-item>
                         <el-dropdown-item divided>
                             <div class="setting-div">
-                                <span class="setting-icon"><i class="material-icons">assignment_return</i></span> 
-                                <span class="setting-string" @click="remove"> Sign out  退出</span>
+                                <span class="setting-icon">
+                                	<i class="iconfont icon-tuichu1"></i>
+                                </span> 
+                                <span class="setting-string" @click="remove"> 退出</span>
                             </div>
                             
                         </el-dropdown-item>
@@ -300,9 +307,9 @@
         font-size:12px;
     }
     .setting-icon{
-        padding-top:3px;
         padding-right:3px;
     }
+  
     
 
 

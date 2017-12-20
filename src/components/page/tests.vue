@@ -130,7 +130,7 @@
 				formLabelWidth: '120px',
 				valuecd: 'on',
 				ctrls:[
-					{valuecd:}
+				
 				
 				]
 			}

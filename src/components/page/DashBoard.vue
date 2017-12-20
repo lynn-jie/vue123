@@ -11,7 +11,7 @@
 	<div class="block">
 		
 		<el-carousel height="550px">
-			<el-carousel-item v-for="item in imgs" :key="item">
+			<el-carousel-item v-for="item in imgs">
 				
 				<img v-bind:src="item.src" alt="sssss"/>
 				

@@ -6,7 +6,7 @@
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-				<el-breadcrumb-item>客户管理</el-breadcrumb-item>
+				<el-breadcrumb-item :to="{ path: '/customer'}">客户管理</el-breadcrumb-item>
 				<el-breadcrumb-item>机构管理</el-breadcrumb-item>
 			</el-breadcrumb>
 
@@ -113,12 +113,10 @@
 				</div>
 			</el-dialog>
 
-		
-
 		</div>
 		
 		<!--标题栏-->
-		<el-table :data="tableData" style="width: 100%" class="table">
+		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			
@@ -177,6 +175,14 @@
 				
 			</el-table-column>
 		</el-table>
+		
+		
+		
+		<!--分页栏-->
+		<div class="paging block">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
+			</el-pagination>
+		</div>
 
 	</div>
 </template>
@@ -187,7 +193,6 @@
 
 	import { vm, cusid ,orgid} from "../../common/vm.js";
 	
-	
 	let str = '';
 
 	vm.$on(cusid, (count) => {
@@ -195,7 +200,6 @@
 		
 	});
 
-	
 	export default {
 
 		data() {
@@ -230,7 +234,8 @@
 					delivery: false,
 					type: [],
 					resource: '',
-					desc: ''
+					desc: '',
+					createTime:'',
 				},
 				provinces: [],
 				citys: [],
@@ -238,6 +243,11 @@
 				provinceId: '',
 				cityId: '',
 				countyId: '',
+				currentPage: 1,
+				total: 0,
+				size: 100,
+				pages: 1,
+				loading: false,
 			}
 
 		},
@@ -267,39 +277,21 @@
 			cityId(curVal, oldVal) {
 				//console.log(curVal+'-'+oldVal);
 				axios.get(api.apidomain +'address/county/list/' + curVal, {
-
 					}).then(response => {
 						this.countys = response.data;
 					})
 					.catch(error => {
 						console.log(error);
-
 					});
 			}
 
 		},
-
 		methods: {
+			// 传值
 			sendId(index, row) {
-			
 				vm.$emit(orgid,row.id)
 			},
-			handleDelete(index, row) {
-			
-				axios.post(api.apidomain + 'org/updateStatus/'+ row.id +'?status=0',{
-					})
-					.then(response => {
-						alert('删除成功');
-					})
-					.catch(error => {
-						console.log(error);
-						console.log('网络错误');
-					});
-				this.dialogFormVisible = false;
-				this.init();
-			},
-			
-//          对话框form添加数据
+			// 对话框form添加数据
 			handleEdit(index,row){
 			
 				this.dialogFormVisibles = true;
@@ -311,33 +303,45 @@
 				this.cityId = row.cityId;
 				this.countyId =	row.countyId;
 				this.provinceId = row.provinceId;
-				
-				
-				
+	
 			},
-			// 获取
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
+			},
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
+			},
+			// 获取列表
 			init() {
 				
 				if(window.localStorage){ 
 				if(!str){
-                     str=localStorage.getItem("str")
+                     str = localStorage.getItem("str")
 				}
 				localStorage.setItem("str",str);
 			}
 				
-				axios.get(api.apidomain + 'org/list/' + str + '?n=100&p=1', {
+				axios.get(api.apidomain + 'org/list/' + str, {
+						params: {
+							n: this.size,
+							p: this.pages,
+						}
 					})
 					.then(response => {
-						
 						this.tableData = response.data.data;
-						//	alert('成功')
-						
-						
+						this.total = response.data.total;
+						this.size = response.data.size;
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
-
 					});
 			},
 			//省
@@ -365,20 +369,41 @@
 						provinceId:this.provinceId,
 						cityId:this.cityId,
 						countyId:this.countyId,
-						address:this.form.address
+						address:this.form.address,
+//						createTime:this.form.createTime,
 					})
 					.then(response => {
-						
-//						alert('成功')
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
 					});
 					
-					this.dialogFormVisible = false,
+					this.dialogFormVisible = false;
+			},
+			// 删除
+			handleDelete(index, row) {
+				axios.post(api.apidomain + 'org/updateStatus/'+ row.id +'?status=0',{
+					})
+					this.$confirm('此操作将该数据删除 , 是否继续呢?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
+					center: true
+				}).then(() => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					});
 					this.init();
-		
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
+				this.dialogFormVisible = false;
 			},
 			// 修改
 			modify() {
@@ -394,37 +419,15 @@
 
 					})
 					.then(response => {
-						//			console.log(this.tableData);
-						//			console.log(123)
-						//			alert('恭喜添加成功！');
-						
+	
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
 					});
 				this.dialogFormVisibles = false;
-//				this.init();
-			},
-			// 停用
-			open6() {
-				this.$confirm('此操作将停用该数据 , 是否继续呢?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning',
-					center: true
-				}).then(() => {
-					this.$message({
-						type: 'success',
-						message: '停用成功!'
-					});
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消停用'
-					});
-				});
-
+				
 			},
 			//刷新
 			open3() {

@@ -19,7 +19,9 @@
 			<el-button size="medium" type="success" @click="open3">刷新</el-button>
 			<!--新增内嵌表格-->
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
+				<div class="tell">有情提醒：电话号码注册后不可修改哦</div>
 				<el-form :model="form">
+					
 
 					<el-form-item label="姓名" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
@@ -48,15 +50,15 @@
 					<el-form-item label="姓名" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="电话" :label-width="formLabelWidth">
+					<!--<el-form-item label="电话" :label-width="formLabelWidth">
 						<el-input v-model="form.phone" auto-complete="off"></el-input>
-					</el-form-item>
+					</el-form-item>-->
 					<el-form-item label="邮箱" :label-width="formLabelWidth">
 						<el-input v-model="form.mail" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item  label="密码" :label-width="formLabelWidth">
+					<!--<el-form-item  label="密码" :label-width="formLabelWidth">
 						<el-input type="password" v-model="form.passwd" auto-complete="off"></el-input>
-					</el-form-item>
+					</el-form-item>-->
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisibles = false">取 消</el-button>
@@ -68,7 +70,7 @@
 		
 		
 		<!--标题栏-->
-		<el-table :data="tableData" style="width: 100%" class="table">
+		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column  label="用户名称">
@@ -81,9 +83,9 @@
 					<p>{{ scope.row.phone }}</p>
 				</template>
 			</el-table-column>
-			<el-table-column label="最后登陆时间" width="180">
+			<el-table-column label="邮箱" width="180">
 				<template slot-scope="scope">
-					<p>{{ scope.row.last_login_time }}</p>
+					<p>{{ scope.row.mail }}</p>
 				</template>
 			</el-table-column>
 			<el-table-column  label="状态 ">
@@ -102,20 +104,19 @@
 
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
-					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 					
 				</template>
 			</el-table-column>
 		</el-table>
+		
+		<!--分页栏-->
 		<div class="paging block">
-			<!-- <span class="demonstration">调整每页显示条数</span>-->
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
 			</el-pagination>
-
-			<!--@size-change="handleSizeChange"-->
-			<!--@current-change="handleCurrentChange"-->
-			<!--:current-page.sync="currentPage2"-->
 		</div>
+		
+		
 
 	</div>
 </template>
@@ -135,12 +136,14 @@
 	export default {
 		data() {
 			return {
-				tableData: [{
+				tableData: [
+//				{
+	
 //					device_name: 'V12332JSA12SH',
 //					status: '离线',
-//					iccd: '250小时',
+//					time: '250小时',
 //					surplus: '2800小时'
-				},
+//				},
 //				{
 //					controlid: 'X12332JSA12SH',
 //					status: '在线',
@@ -171,7 +174,12 @@
 					passwd: '',
 
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				currentPage: 1,
+				total: 0,
+				size: 100,
+				pages: 1,
+				loading: false,
 			}
 
 		},
@@ -179,7 +187,22 @@
 			this.init();
 		
 		},
-		methods: {	
+		methods: {
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
+			},
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
+			},
+			// 获取
 			init() {
 				if(window.localStorage){ 
 				if(!str){
@@ -190,13 +213,14 @@
 				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
 					})
 					.then(response => {
-						console.log(response);
 						this.tableData = response.data.data;
-						console.log('成功链接');
+						this.total = response.data.total;
+						this.size = response.data.size;
+						
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
+						
 					});
 			},		
 			// 添加
@@ -211,23 +235,19 @@
 
 					})
 					.then(response => {
-						//			console.log(this.tableData);
-						//			console.log(123)
-						//			alert('恭喜添加成功！');
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
 						alert('亲，您的手机号已经存在，请修改后提交')
 
 					});
 				this.dialogFormVisible = false;
-				this.init();
+				
 			},
-		//  删除
-			open6(index, row) {
+			//  删除
+			handleDelete(index, row) {
 				axios.post(api.apidomain + 'user/updateStatus/'+ row.id +'?status=0',{
-					
 				})
 				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
@@ -239,6 +259,7 @@
 						type: 'success',
 						message: '删除成功'
 					});
+					this.init();
 				}).catch(() => {
 					this.$message({
 						type: 'info',
@@ -246,7 +267,7 @@
 					});
 				});
 			},
-//			修改
+			//	修改
 			handleEdit(index,row){
 				this.dialogFormVisibles = true;
 				this.form.name = row.name;
@@ -256,6 +277,7 @@
 				this.form.id = row.id;
 				
 			},
+			//	修改
 			modify() {
 				axios.put(api.apidomain + 'user', {
 						id:this.form.id,
@@ -267,19 +289,17 @@
 
 					})
 					.then(response => {
-						//			console.log(this.tableData);
-						//			console.log(123)
-						//			alert('恭喜添加成功！');
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('网络错误');
 					});
 				this.dialogFormVisibles = false;
-				this.init();
+				
 
 			},
-//			刷新
+			//	刷新
 			open3() {
 				this.$notify({
 					title: '成功',
@@ -317,5 +337,10 @@
 	
 	.el-button+.el-button {
 		margin-left: 0;
+	}
+	.tell {
+		color: cornflowerblue;
+		margin-bottom: 20px;
+		text-align: center;
 	}
 </style>

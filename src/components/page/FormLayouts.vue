@@ -102,16 +102,12 @@
 			</el-table-column>-->
 		</el-table>
 
+		<!--分页栏-->
 		<div class="paging block">
-
-			<!-- <span class="demonstration">调整每页显示条数</span>-->
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
 			</el-pagination>
-
-			<!--@size-change="handleSizeChange"-->
-			<!--@current-change="handleCurrentChange"-->
-			<!--:current-page.sync="currentPage2"-->
 		</div>
+
 
 	</div>
 </template>
@@ -124,20 +120,8 @@
 	export default {
 		data() {
 			return {
-				tableData: [{
-//					device_name: 'V12332JSA12SH',
-//					status: '离线',
-//					iccd: '250小时',
-//					surplus: '2800小时'
-				}
-				,
+				tableData: [
 //				{
-//					controlid: 'X12332JSA12SH',
-//					status: '在线',
-//					time: '250小时',
-//					surplus: '2800小时'
-//
-//				}, {
 //					controlid: 'Q12332JSA12SH',
 //					status: '在线',
 //					time: '250小时',
@@ -161,7 +145,12 @@
 					resource: '',
 					desc: ''
 				},
-				formLabelWidth: '120px'
+				formLabelWidth: '120px',
+				currentPage: 1,
+				total: 0,
+				size: 50,
+				pages: 1,
+				loading: false,
 			}
 
 		},
@@ -172,15 +161,36 @@
 
 		},
 		methods: {
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
+			},
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
+			},
 			
 			init() {
-				axios.get(api.apidomain +'/user/search?n=100&p=1', {
+				axios.get(api.apidomain +'/user/search', {
+					params: {
+							n: this.size,
+							p: this.pages,
+						}
 
 					})
 					.then(response => {
-						console.log(response);
+						
 						this.tableData = response.data.data;
-						console.log('获取数据成功');
+						this.tableData = response.data.data;
+						this.total = response.data.total;
+						this.size = response.data.size;
+					
 					})
 					.catch(error => {
 						console.log(error);

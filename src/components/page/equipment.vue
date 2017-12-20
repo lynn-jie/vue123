@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<!--<v-pageTitle vtitle="EditorPage"></v-pageTitle>-->
+
+		<!--pageTitle-->
 		<h2>设备管理</h2>
 		<div class="nav">
 			<el-breadcrumb separator-class="el-icon-arrow-right">
@@ -8,19 +9,17 @@
 				<el-breadcrumb-item>设备管理</el-breadcrumb-item>
 
 			</el-breadcrumb>
-
 		</div>
 
 		<div class="br"></div>
 
 		<div class="btn">
-
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
 
-			<!--新增表单-->
+			<!--新增表单对话框-->
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
-					<el-form-item label="设备ID" :label-width="formLabelWidth">
+					<el-form-item label="控制器ID" :label-width="formLabelWidth">
 						<el-input v-model="form.iccd" auto-complete="off"></el-input>
 					</el-form-item>
 					<el-form-item label="设备名称" :label-width="formLabelWidth">
@@ -35,70 +34,70 @@
 
 			<el-button size="medium" type="success" @click="open3">刷新</el-button>
 			<!--<el-button size="medium" type="danger" @click="open6">删除</el-button>-->
-
-		</div>
-		
-		
-		<div>
-			
-			<el-dialog title="修改" :visible.sync="dialogFormVisibles">
-				<el-form :model="form">
-					<el-form-item label="设备ID" :label-width="formLabelWidth">
-						<el-input v-model="form.iccd" auto-complete="off"></el-input>
-					</el-form-item>
-					<el-form-item label="设备名称" :label-width="formLabelWidth">
-						<el-input v-model="form.device_name" auto-complete="off"></el-input>
-					</el-form-item>
-				</el-form>
-				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogFormVisibles = false">取 消</el-button>
-					<el-button type="primary" @click="modify">确 定</el-button>
-				</div>
-			</el-dialog>
-			
-			
-			
 		</div>
 
-		<el-table :data="tableData" style="width: 100%" class="table">
+		<!--修改对话框对话框-->
+		<el-dialog title="修改" :visible.sync="dialogFormVisibles">
+			<el-form :model="form">
+				<!--<el-form-item label="控制器ID" :label-width="formLabelWidth">
+					<el-input v-model="form.iccd" auto-complete="off"></el-input>
+				</el-form-item>-->
+				<el-form-item label="设备名称" :label-width="formLabelWidth">
+					<el-input v-model="form.device_name" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisibles = false">取 消</el-button>
+				<el-button type="primary" @click="modify">确 定</el-button>
+			</div>
+		</el-dialog>
+
+		<!--标题栏-->
+		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			<el-table-column prop="iccd" label="控制器ID">
+			<el-table-column label="控制器ID">
+				<template slot-scope="scope">
+					<p>{{ scope.row.iccd }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="switch_status" label="设备状态">
+			<el-table-column label="设备状态">
+				<template slot-scope="scope">
+					<p>{{ scope.row.switch_status }}</p>
+				</template>
 			</el-table-column>
-			<el-table-column prop="device_name" label="设备名称" width="180">
+			<el-table-column label="设备名称" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.device_name }}</p>
+				</template>
 			</el-table-column>
-			<!--<el-table-column prop="last_maintain_time" label="已使用时长" width="180">
-			</el-table-column>-->
-			<el-table-column prop="id" label="ID" width="180">
+			<el-table-column label="已使用时长" width="180">
+				<template slot-scope="scope">
+					<p>{{ scope.row.last_maintain_time }}</p>
+				</template>
 			</el-table-column>
+		
 
 			<el-table-column label="操作">
 				<template slot-scope="scope">
 
-					<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
 					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
+
+					<!--<el-switch v-model="val"  active-color="#13ce66" inactive-color="#ff4949"></el-switch>-->
 					
-					
-						<el-switch v-model="val"  active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-					
-					
+					<el-button size="mini" type="primary" @click="open9(scope.$index, scope.row)">打开设备 </el-button>
+					<el-button size="mini" type="danger" @click="close9(scope.$index, scope.row)">关闭设备 </el-button>
 
 				</template>
 			</el-table-column>
 		</el-table>
 
+		<!--分页栏-->
 		<div class="paging block">
-
-			<!-- <span class="demonstration">调整每页显示条数</span>-->
-			<el-pagination :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="sizes, prev, pager, next" :total="1000">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
 			</el-pagination>
-
-			<!--@size-change="handleSizeChange"-->
-			<!--@current-change="handleCurrentChange"-->
-			<!--:current-page.sync="currentPage2"-->
 		</div>
 
 	</div>
@@ -112,12 +111,7 @@
 	export default {
 		data() {
 			return {
-				tableData: [{
-						//			device_name: 'V12332JSA12SH',
-						//			status: '离线',
-						//			iccd: '250小时',
-						//			surplus: '2800小时'
-					},
+				tableData: [
 					//				{
 					//					controlid: 'X12332JSA12SH',
 					//					status: '在线',
@@ -138,21 +132,32 @@
 				],
 				value4: true,
 				dialogFormVisible: false,
-				dialogFormVisibles:false,
+				dialogFormVisibles: false,
 				form: {
-					device_name: '',
-					ctrl_phone_number: '',
-					date1: '',
-					date2: '',
 					delivery: false,
 					type: [],
 					resource: '',
 					desc: '',
+					factory_time:'',
+					device_type:'',
+					ctrl_phone_number:'',
+					device_model:'',
+					status:'',
+					device_name:'',
+					last_maintain_time:'',
+					id:'',
 					iccd:'',
+					switch_status:'',
 				},
 				formLabelWidth: '120px',
 				val: true,
-				
+				dialogVisible: false,
+				currentPage: 1,
+				total: 0,
+				size: 100,
+				pages: 1,
+				loading: false,
+
 			}
 
 		},
@@ -161,32 +166,85 @@
 			this.init();
 
 		},
+
 		methods: {
-			ctr(index,row){
-				console.log(this.val);
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
 			},
-
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
+			},
+			//获取设备信息
 			init() {
-				axios.get(api.apidomain + 'deviceinfo/search?n=100&p=1', {
+				axios.get(api.apidomain + 'deviceinfo/search', {
+					params: {
+							n: this.size,
+							p: this.pages,
+						}
 
 					})
 					.then(response => {
-						console.log(response);
 						this.tableData = response.data.data;
-						console.log('获取数据成功');
+						this.total = response.data.total;
+						this.size = response.data.size;
+
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
-
+						console.log('网络错误189');
 					});
 			},
-			//
+			
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {});
+			},
+//			设备开
+			open9(index,row) {
+				axios.post(api.apicd + 'device/' + row.iccd + '/open', {
+				})
+				.then(response => {		
+						
+					})
+					.catch(error => {
+						console.log(error);
+						
+					});
+			},
+//			设备关
+			close9(index,row) {
+				axios.post(api.apicd + 'device/' + row.iccd + '/close', {
+				})
+				.then(response => {		
+						console.log('控制器关闭成功')
+					
+					})
+					.catch(error => {
+						console.log(error);
+						
+					});
+			},
+			
+			// 添加信息
 			add() {
-				axios.post(api.apidomain + '/deviceinfo', {
-					    id: this.form.id,
-						name: this.form.iccd,
+				axios.post(api.apidomain + 'deviceinfo', {
+						// id: this.form.id,
+						iccd: this.form.iccd,
 						device_name: this.form.device_name,
+						status: 1,
+						device_type: 1,
+					
 					})
 					.then(response => {
 						//			console.log(this.tableData);
@@ -195,34 +253,44 @@
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
+						console.log('网络错误226行');
 
 					});
 				this.dialogFormVisible = false;
 				this.init();
 
 			},
+			// 修改数据对话框 获取
+			
+			handleEdit(index,row) {
+				this.dialogFormVisibles = true;
+				this.form.iccd = row.iccd;
+				this.form.device_name = row.device_name;
+				this.form.id = row.id;
+			},
+			
+			// 修改数据 提交 ,注意修改不能修改控制器iccd
 			modify() {
-				axios.put(api.apidomain + '/deviceinfo', {
-					    id: this.form.id,
-						name: this.form.iccd,
+				axios.put(api.apidomain + 'deviceinfo', {
+						id: this.form.id,
+						iccd: this.form.iccd,
 						device_name: this.form.device_name,
 					})
 					.then(response => {
-						//			console.log(this.tableData);
-						//			console.log(123)
-						//			alert('恭喜添加成功！');
+						this.init();
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误');
+						console.log('网络错误254行');
 
 					});
-				this.dialogFormVisible = false;
-				this.init();
+				this.dialogFormVisibles = false;
+				
+			},
 			
-			
-			open6() {
+			// 删除
+			open6(index, row) {
+				axios.post(api.apidomain + 'deviceinfo/updateStatus/' + row.id + '?status=0', {});
 				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -239,14 +307,16 @@
 						message: '已取停用'
 					});
 				});
-
+				this.init();
 			},
+			//刷新
 			open3() {
 				this.$notify({
 					title: '成功',
 					message: '刷新成功了哟，点击可关闭',
 					type: 'success'
 				});
+				this.init();
 			}
 		}
 	}
