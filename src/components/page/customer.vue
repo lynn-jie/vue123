@@ -241,7 +241,7 @@
 					})
 					.then(response => {
 						this.tableData = response.data.data;
-						this.total = response.data.total;
+						this.total = response.data.data.length;
 						this.size = response.data.size;
 						//this.pages= response.data.pages;
 

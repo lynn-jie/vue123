@@ -236,10 +236,14 @@
 					})
 					.then(response => {
 						this.init();
+						
 					})
 					.catch(error => {
 						console.log(error);
-						alert('亲，您的手机号已经存在，请修改后提交')
+						this.$notify.error({
+							title: '错误提醒：',
+							message: '亲，您的手机号已经存在，请修改'
+						});
 
 					});
 				this.dialogFormVisible = false;

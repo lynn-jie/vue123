@@ -53,7 +53,7 @@
 		</el-dialog>
 
 		<!--标题栏-->
-		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
+		<el-table v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
 			<el-table-column label="控制器ID">
@@ -76,7 +76,6 @@
 					<p>{{ scope.row.last_maintain_time }}</p>
 				</template>
 			</el-table-column>
-		
 
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -86,7 +85,7 @@
 					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
 
 					<!--<el-switch v-model="val"  active-color="#13ce66" inactive-color="#ff4949"></el-switch>-->
-					
+
 					<el-button size="mini" type="primary" @click="open9(scope.$index, scope.row)">打开设备 </el-button>
 					<el-button size="mini" type="danger" @click="close9(scope.$index, scope.row)">关闭设备 </el-button>
 
@@ -138,16 +137,16 @@
 					type: [],
 					resource: '',
 					desc: '',
-					factory_time:'',
-					device_type:'',
-					ctrl_phone_number:'',
-					device_model:'',
-					status:'',
-					device_name:'',
-					last_maintain_time:'',
-					id:'',
-					iccd:'',
-					switch_status:'',
+					factory_time: '',
+					device_type: '',
+					ctrl_phone_number: '',
+					device_model: '',
+					status: '',
+					device_name: '',
+					last_maintain_time: '',
+					id: '',
+					iccd: '',
+					switch_status: '',
 				},
 				formLabelWidth: '120px',
 				val: true,
@@ -174,18 +173,18 @@
 			},
 			// 单击分页
 			handleCurrentChange(val) {
-					this.pages = val,
+				this.pages = val,
 					this.loading = true,
 					this.init(),
 					setTimeout(() => {
-//						loading.close();
+						//						loading.close();
 						this.loading = false;
 					}, 300)
 			},
 			//获取设备信息
 			init() {
 				axios.get(api.apidomain + 'deviceinfo/search', {
-					params: {
+						params: {
 							n: this.size,
 							p: this.pages,
 						}
@@ -193,7 +192,7 @@
 					})
 					.then(response => {
 						this.tableData = response.data.data;
-						this.total = response.data.total;
+						this.total = response.data.data.length;
 						this.size = response.data.size;
 
 					})
@@ -202,7 +201,7 @@
 						console.log('网络错误189');
 					});
 			},
-			
+
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -210,32 +209,30 @@
 					})
 					.catch(_ => {});
 			},
-//			设备开
-			open9(index,row) {
-				axios.post(api.apicd + 'device/' + row.iccd + '/open', {
-				})
-				.then(response => {		
-						
+			//			设备开
+			open9(index, row) {
+				axios.post(api.apicd + 'device/' + row.iccd + '/open', {})
+					.then(response => {
+
 					})
 					.catch(error => {
 						console.log(error);
-						
+
 					});
 			},
-//			设备关
-			close9(index,row) {
-				axios.post(api.apicd + 'device/' + row.iccd + '/close', {
-				})
-				.then(response => {		
+			//			设备关
+			close9(index, row) {
+				axios.post(api.apicd + 'device/' + row.iccd + '/close', {})
+					.then(response => {
 						console.log('控制器关闭成功')
-					
+
 					})
 					.catch(error => {
 						console.log(error);
-						
+
 					});
 			},
-			
+
 			// 添加信息
 			add() {
 				axios.post(api.apidomain + 'deviceinfo', {
@@ -244,7 +241,7 @@
 						device_name: this.form.device_name,
 						status: 1,
 						device_type: 1,
-					
+
 					})
 					.then(response => {
 						//			console.log(this.tableData);
@@ -253,7 +250,11 @@
 					})
 					.catch(error => {
 						console.log(error);
-						console.log('网络错误226行');
+						
+						this.$notify.error({
+							title: '错误提醒：',
+							message: '控制器已经存在，请修改后提交哈'
+						});
 
 					});
 				this.dialogFormVisible = false;
@@ -261,14 +262,14 @@
 
 			},
 			// 修改数据对话框 获取
-			
-			handleEdit(index,row) {
+
+			handleEdit(index, row) {
 				this.dialogFormVisibles = true;
 				this.form.iccd = row.iccd;
 				this.form.device_name = row.device_name;
 				this.form.id = row.id;
 			},
-			
+
 			// 修改数据 提交 ,注意修改不能修改控制器iccd
 			modify() {
 				axios.put(api.apidomain + 'deviceinfo', {
@@ -285,13 +286,13 @@
 
 					});
 				this.dialogFormVisibles = false;
-				
+
 			},
-			
+
 			// 删除
 			open6(index, row) {
 				axios.post(api.apidomain + 'deviceinfo/updateStatus/' + row.id + '?status=0', {});
-				this.$confirm('此操作将永久停用该数据 , 是否继续呢?', '提示', {
+				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning',
@@ -299,12 +300,12 @@
 				}).then(() => {
 					this.$message({
 						type: 'success',
-						message: '停用成功!'
+						message: '删除成功!'
 					});
 				}).catch(() => {
 					this.$message({
 						type: 'info',
-						message: '已取停用'
+						message: '已取删除'
 					});
 				});
 				this.init();

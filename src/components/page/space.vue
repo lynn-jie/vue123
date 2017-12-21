@@ -78,6 +78,44 @@
 					<el-button type="primary" @click="modify">确 定</el-button>
 				</div>
 			</el-dialog>
+			
+			
+			<!--用户空间设置控件-->
+		
+		<el-dialog title="分配角色" :visible.sync="dialogFormVisiblex">
+			
+				<el-form :model="userinfo">
+					<el-form-item label="角色选择" :label-width="formLabelWidth">
+						
+						<select v-model="userinfo.memberId">
+								<option value=''>请选择</option>
+								<option v-for="item in userinfo" v-bind:value="item.id">{{ item.name }}</option>
+						</select>
+						
+					</el-form-item>
+					
+					<el-form-item label="角色类型" :label-width="formLabelWidth">
+						
+						<select v-model="userinfo.userType">
+								<option>请选择</option>
+								<option :value='0'>管理员</option>
+								<option :value='2'>用户</option>
+								<option :value='3'>维护员</option>
+								
+								<!--<option v-for="item in userinfo" v-bind:value="item.id">{{ item.name }}</option>-->
+						</select>
+						
+					
+				</el-form-item>	
+					
+				</el-form>
+				
+			
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisiblex = false">取 消</el-button>
+				<el-button type="primary" @click="settingpost">确 定</el-button>
+			</div>
+		</el-dialog>
 		
 		
 		<!--标题栏-->
@@ -126,14 +164,14 @@
 			
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					<!--<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>-->
-					<!--<router-link to="../member">
-						<el-button size="mini" type="warning" @click="sendId(scope.$index, scope.row)" >成员管理</el-button>
-					</router-link>-->
 					
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
+					
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					
+					<el-button size="mini" @click="setingget(scope.$index, scope.row)">设置</el-button>
+
+					
 				</template>
 			</el-table-column>
 		</el-table>
@@ -175,25 +213,17 @@
 		data() {
 			return {
 				tableData: [
-//					{
-//					date: '2016-05-04',
-//					name: '大（2）班 ',
-//					telephone: '025-5201314',
-//					admini: '尹余',
-//					controlid: 'asad2wq31ds',
-//					number: '12',
-//					address: '江苏省南京市江宁区秣周东路12号'
-//					}
+				
 				],
 				prnumber:'',
 				mmnumber:'',
 				dialogFormVisible: false,
 				dialogFormVisibles: false,
+				dialogFormVisiblex: false,
+				
 				formLabelWidth: '120px',
 				form: {
 					name: '',
-					date1: '',
-					date2: '',
 					delivery: false,
 					type: [],
 					resource: '',
@@ -216,67 +246,63 @@
 				},
 				// 接收省数据
 				deviceinfos:[],
+				userinfo:[
+				],
 				currentPage: 1,
 				total: 0,
 				size: 100,
 				pages: 1,
 				loading: false,
 			}
-
 		},
 		created() {
 			this.init();
 			this.deviceinfo();
+			this.userid();
 
 		},
 		methods: {
-			
-			// 每页多少条
-			handleSizeChange(size) {
-				this.pagesize = size;
-			},
-			// 单击分页
-			handleCurrentChange(val) {
-					this.pages = val,
-					this.loading = true,
-					this.init(),
-					setTimeout(() => {
-//						loading.close();
-						this.loading = false;
-					}, 300)
-			},
-			handleEdit(index,row){
-				this.dialogFormVisibles = true;
+			// 设置信息获取
+			setingget(index,row){
+				this.dialogFormVisiblex = true;
 				this.form.id = row.id;
 				this.form.customerId = row.customerId;
 				this.form.name = row.name;
 				this.form.cleanerAmount = row.cleanerAmount;
 				this.form.orgId = row.orgId;
 				this.form.deviceId = row.deviceId;
-				
+
 			},
-			// 修改
-			modify(){
-				axios.put(api.apidomain + 'space/'+ this.form.id, {
+			// 设置信息发送
+			settingpost(){
+				axios.post(api.apidomain + 'userspace/add/'+ this.form.id, {
 						
-						deviceId:this.form.deviceId,
-						name:this.form.name,
-						cleanerAmount:this.form.cleanerAmount,
-						customerId:str,
-						orgId:orgids,
+						memberId:this.userinfo.memberId,
+						userType:this.userinfo.userType.toString(),
 					})
 					.then(response => {
-						console.log(response);
-						this.tableData = response.data.data;
+						 
 						this.init();
 					})
 					.catch(error => {
 						console.log(error);
 					});
-					
-					this.dialogFormVisibles = false;
-		
+				this.dialogFormVisiblex = false;
+				
 			},
+			userid() {
+				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
+					
+					})
+					.then(response => {
+						this.userinfo = response.data.data;
+					})
+					.catch(error => {
+						console.log(error);
+						
+					});
+			},
+			
 			// 获取数据列表
 			init() {
 				
@@ -301,10 +327,12 @@
 					}
 					})
 					.then(response => {
+						console.log(response)
 						this.tableData = response.data.data;
 						this.tableData = response.data.data;
-						this.total = response.data.total;
+						this.total = response.data.data.length;
 						this.size = response.data.size;
+						console.log(str)
 					})
 					.catch(error => {
 						console.log(error);
@@ -345,6 +373,39 @@
 					});
 					this.dialogFormVisible = false;
 			},
+			//	修改信息对话框获取
+			handleEdit(index,row){
+				this.dialogFormVisibles = true;
+				this.form.id = row.id;
+				this.form.customerId = row.customerId;
+				this.form.name = row.name;
+				this.form.cleanerAmount = row.cleanerAmount;
+				this.form.orgId = row.orgId;
+				this.form.deviceId = row.deviceId;
+				
+			},
+			// 修改提交
+			modify(){
+				axios.put(api.apidomain + 'space/'+ this.form.id, {
+						
+						deviceId:this.form.deviceId,
+						name:this.form.name,
+						cleanerAmount:this.form.cleanerAmount,
+						customerId:str,
+						orgId:orgids,
+					})
+					.then(response => {
+						console.log(response);
+						this.tableData = response.data.data;
+						this.init();
+					})
+					.catch(error => {
+						console.log(error);
+					});
+					
+					this.dialogFormVisibles = false;
+		
+			},
 			
 			// 删除
 			handleDelete(index, row) {
@@ -381,6 +442,20 @@
 			},
 			handleChange(value) {
 			console.log(value);
+			},
+			// 每页多少条
+			handleSizeChange(size) {
+				this.pagesize = size;
+			},
+			// 单击分页
+			handleCurrentChange(val) {
+					this.pages = val,
+					this.loading = true,
+					this.init(),
+					setTimeout(() => {
+//						loading.close();
+						this.loading = false;
+					}, 300)
 			},
 			
 		}
