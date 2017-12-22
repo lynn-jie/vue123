@@ -88,17 +88,17 @@
 							省
 							<select id="p" v-model="provinceId">
 								<option value="">请选择</option>
-								<option v-for="item in provinces" v-bind:value="item.id">{{ item.name }}</option>
+								<option v-for="item in provinces" v-bind:key="item.id">{{ item.name }}</option>
 							</select>
 							市
 							<select id="c" v-model="cityId">
 								<option value="">请选择</option>
-								<option v-for="item in citys" v-bind:value="item.id">{{ item.name }}</option>
+								<option v-for="item in citys" v-bind:key="item.id">{{ item.name }}</option>
 							</select>
 							区
 							<select id="c" v-model="countyId">
 								<option value="">请选择</option>
-								<option v-for="item in countys" v-bind:value="item.id">{{ item.name }}</option>
+								<option v-for="item in countys" v-bind:key="item.id">{{ item.name }}</option>
 							</select>
 						</div>
 						<el-input v-model="form.address" auto-complete="off" placeholder='请输入具体地址'></el-input>

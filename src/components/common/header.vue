@@ -32,7 +32,7 @@
                    <el-col :span="10">
 
                         <!--这是消息的下拉列表 用了element里的 dropdown组件-->                
-                        <el-dropdown menu-align="start" >
+                        <!--<el-dropdown menu-align="start" >
                             <span>
                                 <el-badge :value="5" class="item">
                                     <i class="el-icon-message"></i>
@@ -57,7 +57,7 @@
                                     </div>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
-                        </el-dropdown>
+                        </el-dropdown>-->
                      </el-col>  
                      
                     <!--<el-col :span="8">  

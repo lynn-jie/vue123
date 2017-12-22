@@ -302,6 +302,7 @@
 						type: 'success',
 						message: '删除成功!'
 					});
+					this.init();
 				}).catch(() => {
 					this.$message({
 						type: 'info',

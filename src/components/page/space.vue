@@ -8,7 +8,7 @@
 				<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ path: '/customer'}">客户管理</el-breadcrumb-item>
 				<el-breadcrumb-item :to="{ path: '/organization'}">机构管理</el-breadcrumb-item>
-				<el-breadcrumb-item >空间管理</el-breadcrumb-item>
+				<el-breadcrumb-item>空间管理</el-breadcrumb-item>
 			</el-breadcrumb>
 
 		</div>
@@ -26,18 +26,18 @@
 					<el-form-item label="空间名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					
+
 					<el-form-item label="净化器数量" :label-width="formLabelWidth">
 						<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
 						<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
 					</el-form-item>
 					<el-form-item label="设备ID" :label-width="formLabelWidth">
-							<select id="p" v-model="form.deviceId">
-								<option value="">请选择</option>
-								<option v-for="item in deviceinfos">{{ item.id }}</option>
-							</select>
-				</el-form-item>
-					
+						<select id="p" v-model="form.deviceId">
+							<option value="">请选择</option>
+							<option v-for="item in deviceinfos">{{ item.id }}</option>
+						</select>
+					</el-form-item>
+
 				</el-form>
 
 				<div slot="footer" class="dialog-footer">
@@ -50,79 +50,71 @@
 			<!--<el-button size="medium" type="danger" @click="open6">停用</el-button>-->
 
 		</div>
-		
-		
+
 		<!--修改对话框-->
 		<el-dialog title="修改" :visible.sync="dialogFormVisibles">
-				<el-form :model="form">
-					<el-form-item label="空间名称" :label-width="formLabelWidth">
-						<el-input v-model="form.name" auto-complete="off"></el-input>
-					</el-form-item>
-					
-					<el-form-item label="净化器数量" :label-width="formLabelWidth">
-						<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
-						<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
-					</el-form-item>
-				
-				<el-form-item label="设备ID" :label-width="formLabelWidth">
-							<select id="p" v-model="form.deviceId">
-								<option value="">请选择</option>
-								<option v-for="item in deviceinfos">{{ item.id }}</option>
-							</select>
+			<el-form :model="form">
+				<el-form-item label="空间名称" :label-width="formLabelWidth">
+					<el-input v-model="form.name" auto-complete="off"></el-input>
 				</el-form-item>
-					
-				</el-form>
 
-				<div slot="footer" class="dialog-footer">
-					<el-button @click="dialogFormVisibles = false">取 消</el-button>
-					<el-button type="primary" @click="modify">确 定</el-button>
-				</div>
-			</el-dialog>
-			
-			
-			<!--用户空间设置控件-->
-		
+				<el-form-item label="净化器数量" :label-width="formLabelWidth">
+					<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
+					<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+				</el-form-item>
+
+				<el-form-item label="设备ID" :label-width="formLabelWidth">
+					<select id="p" v-model="form.deviceId">
+						<option value="">请选择</option>
+						<option v-for="item in deviceinfos">{{ item.id }}</option>
+					</select>
+				</el-form-item>
+
+			</el-form>
+
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisibles = false">取 消</el-button>
+				<el-button type="primary" @click="modify">确 定</el-button>
+			</div>
+		</el-dialog>
+
+		<!--用户空间设置控件-->
+
 		<el-dialog title="分配角色" :visible.sync="dialogFormVisiblex">
-			
-				<el-form :model="userinfo">
-					<el-form-item label="角色选择" :label-width="formLabelWidth">
+
+			<el-form>
+				<el-form-item label="角色选择" :label-width="formLabelWidth">
+
+					<el-select v-model="userinfo.memberId" placeholder="请选择角色">
 						
-						<select v-model="userinfo.memberId">
-								<option value=''>请选择</option>
-								<option v-for="item in userinfo" v-bind:value="item.id">{{ item.name }}</option>
-						</select>
+						<el-option v-bind:label='item.name' v-for="item in userinfo" v-bind:value="item.id"></el-option>
 						
-					</el-form-item>
-					
-					<el-form-item label="角色类型" :label-width="formLabelWidth">
-						
-						<select v-model="userinfo.userType">
-								<option>请选择</option>
-								<option :value='0'>管理员</option>
-								<option :value='2'>用户</option>
-								<option :value='3'>维护员</option>
-								
-								<!--<option v-for="item in userinfo" v-bind:value="item.id">{{ item.name }}</option>-->
-						</select>
-						
-					
-				</el-form-item>	
-					
-				</el-form>
-				
-			
+					</el-select>
+
+				</el-form-item>
+
+				<el-form-item label="角色类型" :label-width="formLabelWidth">
+					<el-select v-model="userinfo.userType" placeholder="请选择角色">
+						<el-option label="普通用户" v-bind:value='0'></el-option>
+						<el-option label="空间管理员" v-bind:value='1'></el-option>
+						<el-option label="维护人员" v-bind:value='2'></el-option>
+					</el-select>
+
+				</el-form-item>
+
+			</el-form>
+
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisiblex = false">取 消</el-button>
 				<el-button type="primary" @click="settingpost">确 定</el-button>
 			</div>
 		</el-dialog>
-		
-		
+
 		<!--标题栏-->
-		<el-table  v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
+		<el-table v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
-			
+
 			<el-table-column label="空间名称">
 				<template slot-scope="scope">
 					<p>{{ scope.row.name }}</p>
@@ -143,39 +135,36 @@
 					<p>{{ scope.row.cleanerAmount }}</p>
 				</template>
 			</el-table-column>
-			<el-table-column  label="管理员">
+			<el-table-column label="管理员">
 				<template slot-scope="scope">
 					<p>{{ scope.row.admin }}</p>
 				</template>
 			</el-table-column>
-			
-			<el-table-column  label="成员数量" width="180">
+
+			<el-table-column label="成员数量" width="180">
 				<template slot-scope="scope">
 					<p>{{ scope.row.memberCount }}</p>
 				</template>
 			</el-table-column>
-			
+
 			<el-table-column label="创建日期" width="180">
 				<template slot-scope="scope">
 					<p>{{ scope.row.createTime }}</p>
 				</template>
 			</el-table-column>
-			
-			
+
 			<el-table-column label="操作">
 				<template slot-scope="scope">
-					
-					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-					
-					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-					
-					<el-button size="mini" @click="setingget(scope.$index, scope.row)">设置</el-button>
 
-					
+					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
+
+					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+
+					<el-button size="mini" @click="setingget(scope.$index, scope.row)">角色设置</el-button>
+
 				</template>
 			</el-table-column>
 		</el-table>
-
 
 		<!--分页栏-->
 		<div class="paging block">
@@ -187,40 +176,35 @@
 </template>
 
 <script>
-	
 	import axios from 'axios';
-	
+
 	import api from '../../api/api.js';
-	
-	import {vm, cusid, orgid} from "../../common/vm.js";
-	
-	
+
+	import { vm, cusid, orgid } from "../../common/vm.js";
+
 	let str = '';
 	let orgids = '';
-	
-	
-	vm.$on(cusid,(count)=>{
+
+	vm.$on(cusid, (count) => {
 		str = count
 	});
-	
-	
-	vm.$on(orgid,(qwer)=>{
+
+	vm.$on(orgid, (qwer) => {
 		orgids = qwer
 	});
 
-	
 	export default {
 		data() {
 			return {
 				tableData: [
-				
+
 				],
-				prnumber:'',
-				mmnumber:'',
+				prnumber: '',
+				mmnumber: '',
 				dialogFormVisible: false,
 				dialogFormVisibles: false,
 				dialogFormVisiblex: false,
-				
+
 				formLabelWidth: '120px',
 				form: {
 					name: '',
@@ -228,26 +212,25 @@
 					type: [],
 					resource: '',
 					desc: '',
-					deviceName:'',
-					dayUses:'',
-					yearUses:'',
-					createTime:'',
-					monthUses:'',
-					cleanerAmount:'',
-					admin:'',
-					totalUses:'',
-					deviceId:'',
-					deviceIccd:'',
-					status:'',
-					memberCount:'',
-					id:'',
-					balance:'',
-					deviceName:'',
+					deviceName: '',
+					dayUses: '',
+					yearUses: '',
+					createTime: '',
+					monthUses: '',
+					cleanerAmount: '',
+					admin: '',
+					totalUses: '',
+					deviceId: '',
+					deviceIccd: '',
+					status: '',
+					memberCount: '',
+					id: '',
+					balance: '',
+					deviceName: '',
 				},
 				// 接收省数据
-				deviceinfos:[],
-				userinfo:[
-				],
+				deviceinfos: [],
+				userinfo: [],
 				currentPage: 1,
 				total: 0,
 				size: 100,
@@ -263,7 +246,7 @@
 		},
 		methods: {
 			// 设置信息获取
-			setingget(index,row){
+			setingget(index, row) {
 				this.dialogFormVisiblex = true;
 				this.form.id = row.id;
 				this.form.customerId = row.customerId;
@@ -273,58 +256,79 @@
 				this.form.deviceId = row.deviceId;
 
 			},
-			// 设置信息发送
-			settingpost(){
-				axios.post(api.apidomain + 'userspace/add/'+ this.form.id, {
-						
-						memberId:this.userinfo.memberId,
-						userType:this.userinfo.userType.toString(),
-					})
+
+//			axios({
+//				method: 'post',
+//				url: '/user/12345',
+//				data: {
+//					firstName: 'Fred',
+//					lastName: 'Flintstone'
+//				}
+//			});
+
+		//  设置信息角色提交
+			settingpost() {
+
+				axios({
+						method: 'post',
+						url: api.apidomain + 'userspace/add/' + this.form.id,
+						params: {
+							memberId: this.userinfo.memberId,
+							userType: this.userinfo.userType,
+						}
+				})
 					.then(response => {
-						 
+						
 						this.init();
 					})
 					.catch(error => {
 						console.log(error);
+						this.$message({
+						type: 'error',
+						message: '该用户已经设置，请重新选择其他用户...'
+						
+					});
+						
 					});
 				this.dialogFormVisiblex = false;
-				
+
 			},
+//			获取客户下面的用户列表
 			userid() {
-				axios.get(api.apidomain +'user/incustomer/'+ str +'?n=100&p=1', {
-					
+				axios.get(api.apidomain + 'user/incustomer/' + str + '?n=1000&p=1', {
+
 					})
 					.then(response => {
 						this.userinfo = response.data.data;
 					})
 					.catch(error => {
 						console.log(error);
-						
+
 					});
 			},
-			
+
 			// 获取数据列表
 			init() {
-				
+
 				// 获取上一级id存到localStorage防止手动刷新错误
-				if(window.localStorage){
-				if(!str){
-                     str=localStorage.getItem("str")
+				if(window.localStorage) {
+					if(!str) {
+						str = localStorage.getItem("str")
+					}
+					localStorage.setItem("str", str);
 				}
-				localStorage.setItem("str",str);
-			}
-				
-				if(window.localStorage){
-				if(!orgids){
-                     orgids=localStorage.getItem("orgids")
+
+				if(window.localStorage) {
+					if(!orgids) {
+						orgids = localStorage.getItem("orgids")
+					}
+					localStorage.setItem("orgids", orgids);
 				}
-				localStorage.setItem("orgids",orgids);
-			}
-				axios.get(api.apidomain +'space/list/'+ str, {
-					params: {
+				axios.get(api.apidomain + 'space/list/' + str, {
+						params: {
 							n: this.size,
 							p: this.pages,
-					}
+						}
 					})
 					.then(response => {
 						console.log(response)
@@ -332,7 +336,8 @@
 						this.tableData = response.data.data;
 						this.total = response.data.data.length;
 						this.size = response.data.size;
-						console.log(str)
+						console.log(response)
+						
 					})
 					.catch(error => {
 						console.log(error);
@@ -341,40 +346,39 @@
 			},
 			// 获取设备id
 			deviceinfo() {
-				axios.get(api.apidomain +'deviceinfo/search?n=1000&p=1', {
-					})
+				axios.get(api.apidomain + 'deviceinfo/search?n=1000&p=1', {})
 					.then(response => {
-						
+
 						this.deviceinfos = response.data.data;
 					})
 					.catch(error => {
 						console.log(error);
 						console.log('错误');
-						
+
 					});
 			},
 			// 添加
 			add() {
 				axios.post(api.apidomain + 'space', {
-						deviceId:this.form.deviceId,
-						name:this.form.name,
-						cleanerAmount:this.form.cleanerAmount,
-						createTime:this.form.createTime,
-						customerId:str,
-						orgId:orgids,
-						
+						deviceId: this.form.deviceId,
+						name: this.form.name,
+						cleanerAmount: this.form.cleanerAmount,
+						createTime: this.form.createTime,
+						customerId: str,
+						orgId: orgids,
+
 					})
 					.then(response => {
-//					
+						//					
 						this.init();
 					})
 					.catch(error => {
 						console.log(error);
 					});
-					this.dialogFormVisible = false;
+				this.dialogFormVisible = false;
 			},
 			//	修改信息对话框获取
-			handleEdit(index,row){
+			handleEdit(index, row) {
 				this.dialogFormVisibles = true;
 				this.form.id = row.id;
 				this.form.customerId = row.customerId;
@@ -382,17 +386,17 @@
 				this.form.cleanerAmount = row.cleanerAmount;
 				this.form.orgId = row.orgId;
 				this.form.deviceId = row.deviceId;
-				
+
 			},
 			// 修改提交
-			modify(){
-				axios.put(api.apidomain + 'space/'+ this.form.id, {
-						
-						deviceId:this.form.deviceId,
-						name:this.form.name,
-						cleanerAmount:this.form.cleanerAmount,
-						customerId:str,
-						orgId:orgids,
+			modify() {
+				axios.put(api.apidomain + 'space/' + this.form.id, {
+
+						deviceId: this.form.deviceId,
+						name: this.form.name,
+						cleanerAmount: this.form.cleanerAmount,
+						customerId: str,
+						orgId: orgids,
 					})
 					.then(response => {
 						console.log(response);
@@ -402,15 +406,14 @@
 					.catch(error => {
 						console.log(error);
 					});
-					
-					this.dialogFormVisibles = false;
-		
+
+				this.dialogFormVisibles = false;
+
 			},
-			
+
 			// 删除
 			handleDelete(index, row) {
-				axios.post(api.apidomain + 'space/updateStatus/'+ row.id +'?status=0',{
-				});	
+				axios.post(api.apidomain + 'space/updateStatus/' + row.id + '?status=0', {});
 				this.$confirm('此操作将删除该数据 , 是否继续呢?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -429,7 +432,7 @@
 					});
 				});
 				this.dialogFormVisible = false;
-				
+
 			},
 			// 刷新
 			open3() {
@@ -441,7 +444,7 @@
 				this.init();
 			},
 			handleChange(value) {
-			console.log(value);
+				console.log(value);
 			},
 			// 每页多少条
 			handleSizeChange(size) {
@@ -449,15 +452,15 @@
 			},
 			// 单击分页
 			handleCurrentChange(val) {
-					this.pages = val,
+				this.pages = val,
 					this.loading = true,
 					this.init(),
 					setTimeout(() => {
-//						loading.close();
+						//						loading.close();
 						this.loading = false;
 					}, 300)
 			},
-			
+
 		}
 	}
 </script>
@@ -488,6 +491,7 @@
 	.el-button+.el-button {
 		margin-left: 0;
 	}
+	
 	select {
 		width: 90px;
 		height: 35px;
@@ -495,6 +499,4 @@
 		border-radius: 5px;
 		margin-right: 10px;
 	}
-	
-	
 </style>
