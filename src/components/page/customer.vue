@@ -22,13 +22,13 @@
 					<el-form-item label="客户名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.phone" auto-complete="off"></el-input>
+					
+					<el-form-item label="电话"  prop='phone' :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '电话不能为空'},
+      					{ type: 'number', message: '电话必须为数字值'}]">
+						<el-input v-model.number="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<!--<el-form-item label="机构数量" :label-width="formLabelWidth">
-						<el-input v-model="form.orgcount" auto-complete="off"></el-input>-->
-					<!--<el-input-number v-model="form.orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
-					<!--</el-form-item>-->
+
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -49,14 +49,13 @@
 					<el-form-item label="客户名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.phone" auto-complete="off"></el-input>
+					
+					<el-form-item label="电话"  prop='phone' :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '电话不能为空'},
+      					{ type: 'number', message: '电话必须为数字值'}]">
+						<el-input v-model.number="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<!--<el-form-item label="机构数量" :label-width="formLabelWidth">-->
-					<!--<el-input v-model="form.number" auto-complete="off"></el-input>-->
-					<!--<el-input-number v-model="orgcount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
-					<!--<el-input v-model="form.orgcount" auto-complete="off"></el-input>-->
-					<!--</el-form-item>-->
+					
 				</el-form>
 				<div slot="footer" class="dialog-footer">
 					<el-button @click="dialogFormVisibles = false">取 消</el-button>
@@ -129,7 +128,7 @@
 	import api from '../../api/api.js';
 
 	import { vm, cusid, orgid } from "../../common/vm.js";
-	
+
 	export default {
 		data() {
 			return {
@@ -180,7 +179,7 @@
 			},
 			//  填充对话框数据
 			handleEdit(index, row) {
-				
+
 				this.dialogFormVisibles = true;
 				this.form.id = row.id;
 				this.form.name = row.name;
@@ -209,10 +208,9 @@
 					});
 				});
 				this.dialogFormVisible = false;
-				
 
 			},
-			
+
 			// 表单 input 添加数量 按钮
 			handleChange(val) {
 				console.log(val);
@@ -223,11 +221,11 @@
 			},
 			// 单击分页
 			handleCurrentChange(val) {
-					this.pages = val,
+				this.pages = val,
 					this.loading = true,
 					this.init(),
 					setTimeout(() => {
-//						loading.close();
+						//						loading.close();
 						this.loading = false;
 					}, 300)
 			},
@@ -285,7 +283,7 @@
 
 					})
 					.then(response => {
-						
+
 						this.init();
 					})
 					.catch(error => {

@@ -8,7 +8,9 @@ import axios from 'axios';
 //引入element-ui的默认CSS样式
 import 'element-ui/lib/theme-default/index.css';
 
-import VDistpicker from 'v-distpicker'
+import VDistpicker from 'v-distpicker';
+
+import echarts from 'echarts';
 
 //Vue.use(axios);
 

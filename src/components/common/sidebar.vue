@@ -19,11 +19,13 @@
                 </template>
                 
                 <el-menu-item index="customer">客户管理</el-menu-item>
-                <el-menu-item index="organization">机构管理</el-menu-item>
+                <!--<el-menu-item index="organization">机构管理</el-menu-item>
                 <el-menu-item index="space">空间管理</el-menu-item>
                 <el-menu-item index="member">成员管理</el-menu-item>
                 <el-menu-item index="login">登陆</el-menu-item>
-                <el-menu-item index="tests">测试</el-menu-item>
+                <el-menu-item index="modifypd">修改密码</el-menu-item>
+                <el-menu-item index="FormLayouts">表格</el-menu-item>-->
+                
                 
                 
                

@@ -21,17 +21,24 @@
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<div class="tell">有情提醒：电话号码注册后不可修改哦</div>
 				<el-form :model="form">
-					
-
 					<el-form-item label="姓名" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.phone" auto-complete="off"></el-input>
+					
+					<el-form-item label="电话"  prop='phone' :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '电话不能为空'},
+      					{ type: 'number', message: '电话必须为数字值'}]">
+						<el-input v-model.number="form.phone" auto-complete="off"></el-input>
 					</el-form-item>
-					<el-form-item label="邮箱" :label-width="formLabelWidth">
+					
+					<el-form-item label="邮箱" prop="mail" :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+      					{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }]">
 						<el-input v-model="form.mail" auto-complete="off"></el-input>
 					</el-form-item>
+					
+					
+					
 					<el-form-item  label="密码" :label-width="formLabelWidth">
 						<el-input type="password" v-model="form.passwd" auto-complete="off"></el-input>
 					</el-form-item>

@@ -14,7 +14,7 @@ import member from '@/components/page/member';
 
 import usermgt from '@/components/page/usermgt';
 
-import tests from '@/components/page/tests';
+import modifypd from '@/components/page/modifypd';
 
 
 
@@ -79,8 +79,8 @@ mode:'hash',
           meta:{requiresAuth:true},
           
         },{
-        	path:'/tests',
-          component:tests,
+        	path:'/modifypd',
+          component:modifypd,
           meta:{requiresAuth:true},
           
         }

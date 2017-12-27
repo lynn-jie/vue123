@@ -115,7 +115,9 @@
                                 <span class="setting-icon">
                                 	<i class="iconfont icon-shezhi"></i>
                                 </span> 
-                                <span class="setting-string"> 设置</span>
+                                <router-link to="../modifypd">
+                                	<span class="setting-string"> 修改密码</span>
+                                </router-link>
                             </div>
                          
                         </el-dropdown-item>
@@ -309,7 +311,9 @@
     .setting-icon{
         padding-right:3px;
     }
-  
+  	.setting-string {
+  		  color:#666;
+  	}
     
 
 

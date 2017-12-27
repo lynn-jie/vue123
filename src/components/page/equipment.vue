@@ -88,6 +88,9 @@
 
 					<el-button size="mini" type="primary" @click="open9(scope.$index, scope.row)">打开设备 </el-button>
 					<el-button size="mini" type="danger" @click="close9(scope.$index, scope.row)">关闭设备 </el-button>
+					
+					<!--<el-switch v-model="value1"  active-color="#13ce66" inactive-color="#ff4949" ></el-switch>-->
+					
 
 				</template>
 			</el-table-column>
@@ -98,7 +101,7 @@
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-size="size" layout="total, prev, pager, next" :total="total">
 			</el-pagination>
 		</div>
-
+		 
 	</div>
 </template>
 
@@ -146,10 +149,10 @@
 					last_maintain_time: '',
 					id: '',
 					iccd: '',
-					switch_status: '',
+					switch_status:1,
 				},
+				value1:1,
 				formLabelWidth: '120px',
-				val: true,
 				dialogVisible: false,
 				currentPage: 1,
 				total: 0,
@@ -191,9 +194,12 @@
 
 					})
 					.then(response => {
+						
 						this.tableData = response.data.data;
 						this.total = response.data.data.length;
 						this.size = response.data.size;
+						
+						
 
 					})
 					.catch(error => {
@@ -209,23 +215,34 @@
 					})
 					.catch(_ => {});
 			},
-			//			设备开
+			//	设备开
 			open9(index, row) {
 				axios.post(api.apicd + 'device/' + row.iccd + '/open', {})
 					.then(response => {
-
+						
+						this.init();
+						this.$message({
+         		 		message: '设备已经打开，请刷新后查看状态',
+          				type: 'success'
+        				});
 					})
 					.catch(error => {
 						console.log(error);
+						
 
 					});
 			},
-			//			设备关
+			//	设备关
 			close9(index, row) {
 				axios.post(api.apicd + 'device/' + row.iccd + '/close', {})
 					.then(response => {
-						console.log('控制器关闭成功')
-
+						
+						this.init();
+						this.$message({
+         		 		message: '设备已经关闭，请刷新后查看状态',
+          				type: 'success'
+        				});
+						
 					})
 					.catch(error => {
 						console.log(error);
@@ -244,13 +261,15 @@
 
 					})
 					.then(response => {
-						//			console.log(this.tableData);
-						//			console.log(123)
-						//			alert('恭喜添加成功！');
+						this.$message({
+         		 		message: '设备添加成功，请刷新后查看',
+          				type: 'success'
+        				});
+						
 					})
 					.catch(error => {
 						console.log(error);
-						
+
 						this.$notify.error({
 							title: '错误提醒：',
 							message: '控制器已经存在，请修改后提交哈'

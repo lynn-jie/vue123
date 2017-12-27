@@ -25,9 +25,14 @@
 					<el-form-item label="机构名称" :label-width="formLabelWidth">
 						<el-input v-model="form.name" auto-complete="off" placeholder='请输入机构名称'></el-input>
 					</el-form-item>
-					<el-form-item label="电话" :label-width="formLabelWidth">
-						<el-input v-model="form.tel" auto-complete="off" placeholder='请输入固定电话或11位手机号码'></el-input>
+					<!--正则判断数值-->
+					<el-form-item label="电话"  prop='tel' :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '电话不能为空'},
+      					{ type: 'number', message: '电话必须为数字值'}]">
+						<el-input v-model.number="form.tel" auto-complete="off" placeholder='请输入固定电话或11位手机号码'></el-input>
 					</el-form-item>
+					
+					
 
 					<!--联级选择择器  begin methode-->
 					<el-form-item label="地址" :label-width="formLabelWidth">

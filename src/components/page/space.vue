@@ -19,7 +19,7 @@
 
 			<el-button size="medium" type="primary" @click="dialogFormVisible = true">新增</el-button>
 
-			<!--新增内嵌表格-->
+<!--新增内嵌表格-->
 
 			<el-dialog title="新增" :visible.sync="dialogFormVisible">
 				<el-form :model="form">
@@ -27,10 +27,18 @@
 						<el-input v-model="form.name" auto-complete="off"></el-input>
 					</el-form-item>
 
-					<el-form-item label="净化器数量" :label-width="formLabelWidth">
+					<!--<el-form-item label="净化器数量" :label-width="formLabelWidth">
 						<el-input v-model="form.cleanerAmount" auto-complete="off"></el-input>
-						<!--<el-input-number v-model="form.cleanerAmount" @change="handleChange" :min="0" :max="500" label="请输入"></el-input-number>-->
+						
+					</el-form-item>-->
+					
+					<el-form-item label="净化器数量"  prop='cleanerAmount' :label-width="formLabelWidth" :rules="[
+      					{ required: true, message: '数量不能为空'},
+      					{ type: 'number', message: '数量必须为数字值'}]">
+						<el-input v-model.number="form.cleanerAmount" auto-complete="off"></el-input>
 					</el-form-item>
+					
+					
 					<el-form-item label="设备ID" :label-width="formLabelWidth">
 						<select id="p" v-model="form.deviceId">
 							<option value="">请选择</option>
@@ -51,7 +59,7 @@
 
 		</div>
 
-		<!--修改对话框-->
+<!--修改对话框-->
 		<el-dialog title="修改" :visible.sync="dialogFormVisibles">
 			<el-form :model="form">
 				<el-form-item label="空间名称" :label-width="formLabelWidth">
@@ -75,42 +83,53 @@
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisibles = false">取 消</el-button>
 				<el-button type="primary" @click="modify">确 定</el-button>
+			
 			</div>
 		</el-dialog>
 
-		<!--用户空间设置控件-->
+<!--用户空间设置控件-->
 
 		<el-dialog title="分配角色" :visible.sync="dialogFormVisiblex">
-
 			<el-form>
-				<el-form-item label="角色选择" :label-width="formLabelWidth">
-
-					<el-select v-model="userinfo.memberId" placeholder="请选择角色">
-						
+				<el-form-item label="角色" :label-width="formLabelWidth">
+					<el-select v-model="userinfo.memberId" placeholder="角色选择">
 						<el-option v-bind:label='item.name' v-for="item in userinfo" v-bind:value="item.id"></el-option>
-						
 					</el-select>
-
 				</el-form-item>
-
-				<el-form-item label="角色类型" :label-width="formLabelWidth">
-					<el-select v-model="userinfo.userType" placeholder="请选择角色">
+				<el-form-item label="类型" :label-width="formLabelWidth">
+					<el-select v-model="userinfo.userType" placeholder="类型选择">
 						<el-option label="普通用户" v-bind:value='0'></el-option>
 						<el-option label="空间管理员" v-bind:value='1'></el-option>
 						<el-option label="维护人员" v-bind:value='2'></el-option>
 					</el-select>
-
 				</el-form-item>
-
 			</el-form>
-
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisiblex = false">取 消</el-button>
 				<el-button type="primary" @click="settingpost">确 定</el-button>
 			</div>
 		</el-dialog>
+		
+		
+<!--用户空间权限删除-->
+		<el-dialog title="分配角色" :visible.sync="dialogFormVisibley">
+			<el-form>
+				<el-form-item label="角色" :label-width="formLabelWidth">
+					<el-select v-model="userinfo.memberId" placeholder="角色选择">
+						<el-option v-bind:label='item.name' v-for="item in userinfo" v-bind:value="item.id"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisibley = false">取 消</el-button>
+				<el-button type="primary" @click="delrole">确 定</el-button>
+			</div>
+		</el-dialog>
+		
+		
+		
 
-		<!--标题栏-->
+<!--标题栏-->
 		<el-table v-loading="loading" element-loading-text="拼命加载中" :data="tableData" style="width: 100%" class="table">
 			<el-table-column type="selection" width="55">
 			</el-table-column>
@@ -160,7 +179,9 @@
 
 					<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 
-					<el-button size="mini" @click="setingget(scope.$index, scope.row)">角色设置</el-button>
+					<el-button size="mini" @click="setingget(scope.$index, scope.row)">设置</el-button>
+					<el-button size="mini" type="danger" @click="modifyrole(scope.$index, scope.row)">角色删除</el-button>
+					
 
 				</template>
 			</el-table-column>
@@ -204,8 +225,10 @@
 				dialogFormVisible: false,
 				dialogFormVisibles: false,
 				dialogFormVisiblex: false,
+				dialogFormVisibley: false,
 
 				formLabelWidth: '120px',
+				miniWidth:'60px',
 				form: {
 					name: '',
 					delivery: false,
@@ -245,6 +268,7 @@
 
 		},
 		methods: {
+			
 			// 设置信息获取
 			setingget(index, row) {
 				this.dialogFormVisiblex = true;
@@ -257,18 +281,8 @@
 
 			},
 
-//			axios({
-//				method: 'post',
-//				url: '/user/12345',
-//				data: {
-//					firstName: 'Fred',
-//					lastName: 'Flintstone'
-//				}
-//			});
-
 		//  设置信息角色提交
 			settingpost() {
-
 				axios({
 						method: 'post',
 						url: api.apidomain + 'userspace/add/' + this.form.id,
@@ -278,7 +292,6 @@
 						}
 				})
 					.then(response => {
-						
 						this.init();
 					})
 					.catch(error => {
@@ -293,6 +306,47 @@
 				this.dialogFormVisiblex = false;
 
 			},
+			// 信息获取
+			modifyrole(index, row) {
+				this.dialogFormVisibley = true;
+				this.form.id = row.id;
+				this.form.customerId = row.customerId;
+				this.form.name = row.name;
+				this.form.cleanerAmount = row.cleanerAmount;
+				this.form.orgId = row.orgId;
+				this.form.deviceId = row.deviceId;
+
+			},
+			
+			// 删除用户成员关系
+			delrole(index,row){
+				axios({
+						method: 'post',
+						url: api.apidomain + 'userspace/delete/' + this.form.id,
+						params: {
+							spaceId: this.form.id ,
+							memberId: this.userinfo.memberId,
+						}
+				})
+					.then(response => {
+						console.log('成功')
+						this.init();
+					})
+					.catch(error => {
+						console.log(error);
+						this.$message({
+						type: 'error',
+						message: '错误'
+						
+					});
+						
+					});
+				this.dialogFormVisibley = false;
+
+			},
+			
+
+			
 //			获取客户下面的用户列表
 			userid() {
 				axios.get(api.apidomain + 'user/incustomer/' + str + '?n=1000&p=1', {
@@ -331,12 +385,10 @@
 						}
 					})
 					.then(response => {
-						console.log(response)
-						this.tableData = response.data.data;
 						this.tableData = response.data.data;
 						this.total = response.data.data.length;
 						this.size = response.data.size;
-						console.log(response)
+						
 						
 					})
 					.catch(error => {
@@ -346,7 +398,7 @@
 			},
 			// 获取设备id
 			deviceinfo() {
-				axios.get(api.apidomain + 'deviceinfo/search?n=1000&p=1', {})
+				axios.get(api.apidomain + 'deviceinfo/search?n=10000&p=1', {})
 					.then(response => {
 
 						this.deviceinfos = response.data.data;

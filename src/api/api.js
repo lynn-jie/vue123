@@ -5,7 +5,7 @@ export default{
 	
 
     apidomain:'http://localhost:6688/manager/',    // 测试
-    apicd:'http://localhost:6688/api/',           //测试
+    apicd:'/api/',           //测试
     
 //  apidomain:'/manager/',    // 上线数据api的地址
 //  apicd:'/api/',            //上线开关
