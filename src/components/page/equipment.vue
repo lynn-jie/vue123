@@ -79,17 +79,28 @@
 
 			<el-table-column label="操作">
 				<template slot-scope="scope">
+					
 
 					<el-button size="mini" @click="handleEdit(scope.$index, scope.row)">修改</el-button>
-					<!--<el-button size="mini" type="primary" @click="dialogFormVisible = true">修改</el-button>-->
 					<el-button size="mini" type="danger" @click="open6(scope.$index, scope.row)">删除</el-button>
-
-					<!--<el-switch v-model="val"  active-color="#13ce66" inactive-color="#ff4949"></el-switch>-->
-
 					<el-button size="mini" type="primary" @click="open9(scope.$index, scope.row)">打开设备 </el-button>
 					<el-button size="mini" type="danger" @click="close9(scope.$index, scope.row)">关闭设备 </el-button>
 					
 					<!--<el-switch v-model="value1"  active-color="#13ce66" inactive-color="#ff4949" ></el-switch>-->
+					
+					
+					<el-dropdown @command="handleCommand" >
+						
+						<el-button size="mini" class="el-dropdown-link">下拉菜单</el-button>
+						
+						  <el-dropdown-menu slot="dropdown">
+						  	
+							    <el-dropdown-item command="a">修改</el-dropdown-item>
+							    <el-dropdown-item command="b">狮子头</el-dropdown-item>
+							    
+						  </el-dropdown-menu>
+					</el-dropdown>
+					
 					
 
 				</template>
@@ -170,6 +181,16 @@
 		},
 
 		methods: {
+			
+			handleCommand(command) {
+//      		this.$message('click on item ' + command);
+				if(command === 'a'){
+
+					this.handleEdit(scope.$index, scope.row);
+//					handleEdit(scope.$index, scope.row)
+					
+				}
+     },
 			// 每页多少条
 			handleSizeChange(size) {
 				this.pagesize = size;
@@ -369,4 +390,13 @@
 	.el-button+.el-button {
 		margin-left: 0;
 	}
+	.el-dropdown-link {
+    cursor: pointer;
+    color: #409EFF;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+	
+	
 </style>

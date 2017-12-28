@@ -105,7 +105,7 @@
                         <el-dropdown-item >
                             <div class="setting-div">
                                 <span class="setting-icon">
-                                	<i class="iconfont icon-gerenzhongxin"></i>
+                                	<i class="iconfontone icon-gerenzhongxin"></i>
                                 </span> 
                                 <span class="setting-string"> 个人中心</span>
                             </div>
@@ -113,7 +113,7 @@
                         <el-dropdown-item divided>
                             <div class="setting-div">
                                 <span class="setting-icon">
-                                	<i class="iconfont icon-shezhi"></i>
+                                	<i class="iconfontone icon-shezhi"></i>
                                 </span> 
                                 <router-link to="../modifypd">
                                 	<span class="setting-string"> 修改密码</span>
@@ -124,7 +124,7 @@
                         <el-dropdown-item divided>
                             <div class="setting-div">
                                 <span class="setting-icon">
-                                	<i class="iconfont icon-tuichu1"></i>
+                                	<i class="iconfontone icon-tuichu1"></i>
                                 </span> 
                                 <span class="setting-string" @click="remove"> 退出</span>
                             </div>

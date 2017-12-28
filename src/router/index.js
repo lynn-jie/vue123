@@ -16,6 +16,8 @@ import usermgt from '@/components/page/usermgt';
 
 import modifypd from '@/components/page/modifypd';
 
+import accountinfo from '@/components/page/accountinfo';
+
 
 
 Vue.use(Router)
@@ -81,6 +83,12 @@ mode:'hash',
         },{
         	path:'/modifypd',
           component:modifypd,
+          meta:{requiresAuth:true},
+          
+        },
+        {
+        	path:'/accountinfo',
+          component:accountinfo,
           meta:{requiresAuth:true},
           
         }

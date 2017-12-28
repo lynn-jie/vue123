@@ -20,7 +20,9 @@
 				<el-card class="box-card">
 					<el-row :gutter="6">
 						<el-col :xs="24" :sm="8" :md="8" :lg="8">
-							<el-progress type="circle" :percentage="67" :width="80"></el-progress>
+							<!--<el-progress type="circle" :percentage="67" :width="80"></el-progress>-->
+							<i class="iconfont icon-kongzhiyunhang"></i>
+							
 						</el-col>
 						<el-col :xs="24" :sm="11" :md="12" :lg="12">
 							<div class="cart-string">
@@ -30,7 +32,7 @@
 						</el-col>
 						<el-col :xs="24" :sm="5" :md="4" :lg="4">
 							<div>
-								<!--<i class="material-icons">person_outline</i>-->
+								<!--<i class="material-icons">person_outline</i>-->		
 							</div>
 						</el-col>
 					</el-row>
@@ -42,7 +44,9 @@
 					<el-row :gutter="6">
 						<el-col :xs="24" :sm="8" :md="8" :lg="8">
 							<div>
-								<el-progress type="circle" :percentage="81" :width="80"></el-progress>
+								<!--<el-progress type="circle" :percentage="81" :width="80"></el-progress>-->
+							<i class="iconfont icon-yonghuqun"></i>
+								
 							</div>
 						</el-col>
 						<el-col :xs="24" :sm="11" :md="12" :lg="12">
@@ -65,7 +69,9 @@
 					<el-row :gutter="6">
 						<el-col :xs="24" :sm="8" :md="8" :lg="8">
 							<div>
-								<el-progress type="circle" :percentage="30" :width="80"></el-progress>
+								<!--<el-progress type="circle" :percentage="30" :width="80"></el-progress>-->
+								<i class="iconfont icon-kongqijinghuaqi2"></i>
+								
 							</div>
 						</el-col>
 						<el-col :xs="24" :sm="11" :md="12" :lg="12">
@@ -88,7 +94,8 @@
 					<el-row :gutter="6">
 						<el-col :xs="24" :sm="8" :md="8" :lg="8">
 							<div>
-								<el-progress type="circle" :percentage="88" :width="80"></el-progress>
+								<i class="iconfont icon-xuexiao1"></i>
+								<!--<el-progress type="circle" :percentage="88" :width="80"></el-progress>-->
 							</div>
 						</el-col>
 						<el-col :xs="24" :sm="11" :md="12" :lg="12">
@@ -210,8 +217,12 @@
 		margin-bottom: 5px;
 		margin-top: 6px;
 	}
-	
-	
+	.iconfont{
+		font-size: 65px;
+	}
+	.iconfont:hover{
+		color: #42A1FF;
+	}
 	
 	
 	

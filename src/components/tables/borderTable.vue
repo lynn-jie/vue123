@@ -31,8 +31,8 @@
             yAxis: {},
             series: [{
                 name: 'PM2.5',
-                type: 'bar',
-				itemStyle:{normal:{ color:'#80C4EF'}},
+                type: 'line',
+				itemStyle:{normal:{ color:'red'}},
                 data: [50, 20, 36, 30, 40, 60,70]
             }]	
 			}
